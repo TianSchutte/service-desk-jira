@@ -1,0 +1,28 @@
+{
+    "name": "tianschutte/service-desk-jira",
+    "autoload": {
+        "psr-4": {
+            "Root\\ServiceDeskJira\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TianSchutte\\ServiceDeskJira\\Providers\\ServiceDeskProvider"
+            ],
+            "aliases": {
+                "JiraServiceDesk": "TianSchutte\\ServiceDeskJira\\Facades\\JiraServiceDeskFacade"
+            }
+        }
+    },
+    "authors": [
+        {
+            "name": "Tian Schutte",
+            "email": "tian@giantprocurement.guru"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.0",
+        "mashape/unirest-php": "^3.0"
+    }
+}
