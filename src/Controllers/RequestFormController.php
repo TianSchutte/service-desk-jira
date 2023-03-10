@@ -49,6 +49,7 @@ class RequestFormController
                 'requestFieldValues' => $fieldValues,
                 'serviceDeskId' => $this->project_id,
                 'requestTypeId' => ($requestTypeId),
+//                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side
             ]);
         } catch (\Exception $e) {
             dd($e);

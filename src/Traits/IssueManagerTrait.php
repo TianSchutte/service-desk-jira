@@ -10,6 +10,7 @@ trait IssueManagerTrait
     public function createIssue($data)
     {
         $endpoint = 'rest/servicedeskapi/request';
+
         $response = $this->client->post($endpoint, [
             'json' => $data,
 
