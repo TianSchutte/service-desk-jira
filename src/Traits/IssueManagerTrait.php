@@ -10,21 +10,18 @@ trait IssueManagerTrait
     public function createIssue($data)
     {
         $endpoint = 'rest/servicedeskapi/request';
-
         $response = $this->client->post($endpoint, [
             'json' => $data,
-
         ]);
 
         return json_decode($response->getBody()->getContents());
     }
 
-
-
     public function getIssue(string $issueKey)
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}";
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -34,6 +31,8 @@ trait IssueManagerTrait
         $response = $this->client->put($endpoint, [
             'json' => $data
         ]);
+
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -41,16 +40,17 @@ trait IssueManagerTrait
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}";
         $response = $this->client->delete($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
     public function addComment(string $issueKey, array $data)
     {
-//        servicedesk/{$serviceDeskId}
         $endpoint = "rest/servicedeskapi/request/{$issueKey}/comment";
         $response = $this->client->post($endpoint, [
             'json' => $data
         ]);
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -61,14 +61,7 @@ trait IssueManagerTrait
             'json' => $data,
 
         ]);
-//        $response = $this->client->post($endpoint, [
-//            'multipart' => [
-//                [
-//                    'name' => 'file',
-//                    'contents' => $attachment
-//                ]
-//            ]
-//        ]);
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -87,6 +80,7 @@ trait IssueManagerTrait
                 ]
             ]
         ]);
+
         return json_decode($response->getBody()->getContents());
     }
 

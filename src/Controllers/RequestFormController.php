@@ -14,16 +14,16 @@ class RequestFormController
         $this->project_id = config('service-desk-jira.project_id');
     }
 
-    public function Step1(Request $request)
+    public function showIssueTypes(Request $request)//step 1
     {
         $requestTypes = JiraServiceDeskFacade::getTypes($this->project_id)->values;
 
-        return view('service-desk-jira::request-form-step-1', [
+        return view('service-desk-jira::ticket-form-step-1', [
             'requestTypes' => $requestTypes,
         ]);
     }
 
-    public function Step2(Request $request)
+    public function showIssueForm(Request $request)//step 2
     {
         $requestTypeId = $request->input('request_type_id');
         $fields = JiraServiceDeskFacade::getFields($this->project_id, $requestTypeId)->requestTypeFields;
@@ -31,7 +31,7 @@ class RequestFormController
         $users = JiraServiceDeskFacade::getUsers();
 
 //        dd(json_encode($fields));
-        return view('service-desk-jira::request-form-step-2', [
+        return view('service-desk-jira::ticket-form-step-2', [
             'fields' => $fields,
             'requestTypeId' => $requestTypeId,
             'services' => $services,
@@ -39,7 +39,7 @@ class RequestFormController
         ]);
     }
 
-    public function stepSubmit(Request $request)
+    public function submitIssueForm(Request $request)
     {
         $requestTypeId = $request->input('request_type_id');
         $fieldValues = $request->except('_token', 'request_type_id', 'attachment');
@@ -49,14 +49,16 @@ class RequestFormController
                 'requestFieldValues' => $fieldValues,
                 'serviceDeskId' => $this->project_id,
                 'requestTypeId' => ($requestTypeId),
-//                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side
+//                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation
             ]);
         } catch (\Exception $e) {
             dd($e);
         }
+//        dd(json_encode($fields));
 
         $attachedFiles = $this->AttachFiles($request, $issueRequest);
 
+//        TODO: add some sort of notification/view to show user that the ticket has been submitted
         return json_encode($attachedFiles);
     }
 
@@ -69,12 +71,8 @@ class RequestFormController
         $temporaryAttachmentIds = array();
 
         foreach ($request->file('attachment') as $file) {
-            $response = JiraServiceDeskFacade::attachTemporaryFile(
-                config('service-desk-jira.project_id'),
-                $file);
-
+            $response = JiraServiceDeskFacade::attachTemporaryFile($this->project_id, $file);
             $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
-
         }
 
         $data = [
@@ -87,6 +85,4 @@ class RequestFormController
 
         return JiraServiceDeskFacade::addAttachment($issueRequest->issueId, $data);
     }
-
-
 }
