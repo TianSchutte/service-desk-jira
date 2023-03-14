@@ -3,7 +3,6 @@
 namespace TianSchutte\ServiceDeskJira\Console\Commands;
 
 use Illuminate\Console\Command;
-use TianSchutte\ServiceDeskJira\Facades\JiraServiceDeskFacade;
 
 /**
  * @package MailWizzSync
@@ -29,8 +28,8 @@ class BaseCommand extends Command
 //        ];
 
         try {
-            $request = JiraServiceDeskFacade::getInfo();
-            $this->info($request);
+//            $response = JiraServiceDeskFacade::getUserTickets('tian@giantprocurement.guru');
+//            dd($response);
         } catch (\Exception $e) {
             $this->error($e);
         }

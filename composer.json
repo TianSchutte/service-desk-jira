@@ -9,10 +9,7 @@
         "laravel": {
             "providers": [
                 "TianSchutte\\ServiceDeskJira\\Providers\\ServiceDeskProvider"
-            ],
-            "aliases": {
-                "JiraServiceDesk": "TianSchutte\\ServiceDeskJira\\Facades\\JiraServiceDeskFacade"
-            }
+            ]
         }
     },
     "authors": [

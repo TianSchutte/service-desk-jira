@@ -1,14 +1,32 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use TianSchutte\ServiceDeskJira\Controllers\RequestFormController;
-use TianSchutte\ServiceDeskJira\Facades\JiraServiceDeskFacade;
+use TianSchutte\ServiceDeskJira\Controllers\TicketFormController;
+use TianSchutte\ServiceDeskJira\Controllers\TicketViewController;
 
-Route::get('/form-step-1', [RequestFormController::class, 'showIssueTypes'])
-    ->name('form-step-1');
+//Ticket Menu
+Route::get('/ticket-menu', [TicketViewController::class, 'showTicketMenu'])
+    ->name('ticket-menu');
 
-Route::post('/form-step-2', [RequestFormController::class, 'showIssueForm'])
-    ->name('form-step-2');
 
-Route::post('/form-step-submit', [RequestFormController::class, 'submitIssueForm'])
-    ->name('form-step-submit');
+
+//View Ticket
+Route::get('/tickets', [TicketViewController::class, 'index'])
+    ->name('tickets.index');
+
+Route::get('/tickets/{id}', [TicketViewController::class, 'show'])
+    ->name('tickets.show');
+
+Route::post('/tickets/comments', [TicketViewController::class, 'storeComment'])
+    ->name('tickets.comments.store');// {}
+
+
+//Create Ticket
+Route::get('/tickets.choose', [TicketFormController::class, 'index'])
+    ->name('tickets.choose'); // .
+
+Route::post('/tickets/create', [TicketFormController::class, 'show'])
+    ->name('tickets.create');
+
+Route::post('/tickets', [TicketFormController::class, 'store'])
+    ->name('tickets.store');

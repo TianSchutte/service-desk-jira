@@ -3,6 +3,8 @@
 namespace TianSchutte\ServiceDeskJira\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use TianSchutte\ServiceDeskJira\Console\Commands\BaseCommand;
+use TianSchutte\ServiceDeskJira\Middleware\FloatingButtonMiddleware;
 use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
 
@@ -12,6 +14,7 @@ class ServiceDeskProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/servicedeskjira.php', 'service-desk-jira');
     }
+
     /**
      * Bootstrap services.
      *
@@ -23,17 +26,36 @@ class ServiceDeskProvider extends ServiceProvider
             __DIR__ . '/../config/servicedeskjira.php' => config_path('servicedeskjira.php'),
         ], 'config');
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'service-desk-jira');
+
+        $this->setupDefaults();
+        $this->setupFloatingButtonMiddleware();
+        $this->setupJiraServiceDeskService();
+    }
+
+    private function setupDefaults()
+    {
+
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'service-desk-jira');
 
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \TianSchutte\ServiceDeskJira\Console\Commands\BaseCommand::class,
+                BaseCommand::class,
             ]);
         }
 
+    }
 
+    private function setupFloatingButtonMiddleware()
+    {
+        $router = $this->app['router'];
+        $router->pushMiddlewareToGroup('web', FloatingButtonMiddleware::class);
+    }
+
+
+    private function setupJiraServiceDeskService()
+    {
         $this->app->singleton('service-desk-jira', function ($app) {
             $baseUrl = config('service-desk-jira.base_url');
             $email = config('service-desk-jira.email');

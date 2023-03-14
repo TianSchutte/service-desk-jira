@@ -38,6 +38,7 @@ trait IssueManagerTrait
 
     public function deleteIssue(string $issueKey)
     {
+//        DoESNT EXISTS
         $endpoint = "rest/servicedeskapi/request/{$issueKey}";
         $response = $this->client->delete($endpoint);
 

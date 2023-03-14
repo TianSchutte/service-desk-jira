@@ -17,7 +17,7 @@
         var requestTypeId = $(this).val();
         $.ajax({
             type: 'POST',
-            url: '{{ route('form-step-2') }}',
+            url: '{{ route('tickets.create') }}',
             data: {
                 _token: '{{ csrf_token() }}',
                 request_type_id: requestTypeId,

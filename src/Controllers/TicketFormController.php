@@ -3,33 +3,39 @@
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
 use Illuminate\Http\Request;
-use TianSchutte\ServiceDeskJira\Facades\JiraServiceDeskFacade;
+use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
-class RequestFormController
+class TicketFormController
 {
     private $project_id;
+    /**
+     * @var JiraServiceDeskService
+     */
+    private $jiraServiceDeskService;
 
     public function __construct()
     {
         $this->project_id = config('service-desk-jira.project_id');
+        $this->jiraServiceDeskService = app('service-desk-jira');
     }
 
-    public function showIssueTypes(Request $request)//step 1
+    public function index(Request $request)//step 1
     {
-        $requestTypes = JiraServiceDeskFacade::getTypes($this->project_id)->values;
+        $requestTypes = $this->jiraServiceDeskService->getTypes($this->project_id)->values;
 
         return view('service-desk-jira::ticket-form-step-1', [
             'requestTypes' => $requestTypes,
         ]);
     }
 
-    public function showIssueForm(Request $request)//step 2
+    public function show(Request $request)//step 2
     {
         $requestTypeId = $request->input('request_type_id');
-        $fields = JiraServiceDeskFacade::getFields($this->project_id, $requestTypeId)->requestTypeFields;
-        $services = JiraServiceDeskFacade::getServices();
-        $users = JiraServiceDeskFacade::getUsers();
+        $fields = $this->jiraServiceDeskService->getFields($this->project_id, $requestTypeId)->requestTypeFields;
+        $services = $this->jiraServiceDeskService->getServices();
+        $users = $this->jiraServiceDeskService->getUsers();
 
+//        TODO: somehow make sure only required data is sent through, otherwise wasting time and resources
 //        dd(json_encode($fields));
         return view('service-desk-jira::ticket-form-step-2', [
             'fields' => $fields,
@@ -39,28 +45,31 @@ class RequestFormController
         ]);
     }
 
-    public function submitIssueForm(Request $request)
+    public function store(Request $request)
     {
         $requestTypeId = $request->input('request_type_id');
         $fieldValues = $request->except('_token', 'request_type_id', 'attachment');
 
         try {
-            $issueRequest = JiraServiceDeskFacade::createIssue([
+            $issueRequest = $this->jiraServiceDeskService->createIssue([
                 'requestFieldValues' => $fieldValues,
                 'serviceDeskId' => $this->project_id,
-                'requestTypeId' => ($requestTypeId),
+                'requestTypeId' => $requestTypeId,
 //                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation
             ]);
         } catch (\Exception $e) {
             dd($e);
         }
-//        dd(json_encode($fields));
 
         $attachedFiles = $this->AttachFiles($request, $issueRequest);
 
-//        TODO: add some sort of notification/view to show user that the ticket has been submitted
-        return json_encode($attachedFiles);
+        return view('service-desk-jira::ticket-form-step-3', [
+            'requestTypeId' => $requestTypeId,
+            'attachedFiles' => $attachedFiles,
+            'issueRequest' => $issueRequest,
+        ]);
     }
+
 
     private function AttachFiles($request, $issueRequest)
     {
@@ -71,7 +80,7 @@ class RequestFormController
         $temporaryAttachmentIds = array();
 
         foreach ($request->file('attachment') as $file) {
-            $response = JiraServiceDeskFacade::attachTemporaryFile($this->project_id, $file);
+            $response = $this->jiraServiceDeskService->attachTemporaryFile($this->project_id, $file);
             $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
         }
 
@@ -83,6 +92,6 @@ class RequestFormController
             ]
         ];
 
-        return JiraServiceDeskFacade::addAttachment($issueRequest->issueId, $data);
+        return $this->jiraServiceDeskService->addAttachment($issueRequest->issueId, $data);
     }
 }

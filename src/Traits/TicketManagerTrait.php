@@ -48,4 +48,5 @@ trait TicketManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+
 }
