@@ -2,7 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
-trait TicketManagerTrait
+trait TypeManagerTrait
 {
     public function getTypes(string $serviceDeskId)
     {
@@ -47,6 +47,5 @@ trait TicketManagerTrait
         $response = $this->client->get($endpoint);
         return json_decode($response->getBody()->getContents());
     }
-
 
 }

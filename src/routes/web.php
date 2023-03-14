@@ -5,8 +5,8 @@ use TianSchutte\ServiceDeskJira\Controllers\TicketFormController;
 use TianSchutte\ServiceDeskJira\Controllers\TicketViewController;
 
 //Ticket Menu
-Route::get('/ticket-menu', [TicketViewController::class, 'showTicketMenu'])
-    ->name('ticket-menu');
+Route::get('/tickets/menu', [TicketViewController::class, 'showTicketMenu'])
+    ->name('tickets.menu');
 
 
 

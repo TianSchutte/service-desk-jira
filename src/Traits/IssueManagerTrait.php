@@ -55,6 +55,14 @@ trait IssueManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    public function getComments(string $issueKey)
+    {
+        $endpoint = "rest/servicedeskapi/request/{$issueKey}/comment";
+        $response = $this->client->get($endpoint);
+
+        return json_decode($response->getBody()->getContents());
+    }
+
     public function addAttachment(string $issueKey, $data)
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}/attachment";

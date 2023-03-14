@@ -7,6 +7,9 @@ use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
 class TicketFormController
 {
+    const SERVICES_FIELD_ID = 'customfield_10051';
+    const USERS_FIELD_ID = 'customfield_10003';
+
     private $project_id;
     /**
      * @var JiraServiceDeskService
@@ -32,11 +35,22 @@ class TicketFormController
     {
         $requestTypeId = $request->input('request_type_id');
         $fields = $this->jiraServiceDeskService->getFields($this->project_id, $requestTypeId)->requestTypeFields;
-        $services = $this->jiraServiceDeskService->getServices();
-        $users = $this->jiraServiceDeskService->getUsers();
+        $services = [];
+        $users = [];
 
-//        TODO: somehow make sure only required data is sent through, otherwise wasting time and resources
-//        dd(json_encode($fields));
+        //todo: maybe seperate this?
+        foreach ($fields as $field) {
+            switch ($field->fieldId) {
+                case self::SERVICES_FIELD_ID:
+                    $services = $this->jiraServiceDeskService->getServices();
+                    break;
+                case self::USERS_FIELD_ID:
+                    $users = $this->jiraServiceDeskService->getUsers();
+                    break;
+            }
+        }
+
+//        dd($fields);
         return view('service-desk-jira::ticket-form-step-2', [
             'fields' => $fields,
             'requestTypeId' => $requestTypeId,
@@ -74,7 +88,7 @@ class TicketFormController
     private function AttachFiles($request, $issueRequest)
     {
         if (!$request->hasFile('attachment')) {
-            return 'No Files Attached';
+            return null;
         }
 
         $temporaryAttachmentIds = array();

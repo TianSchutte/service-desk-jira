@@ -5,16 +5,19 @@ namespace TianSchutte\ServiceDeskJira\Services;
 use GuzzleHttp\Client;
 use TianSchutte\ServiceDeskJira\Contracts\DeskManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\IssueManagerInterface;
-use TianSchutte\ServiceDeskJira\Contracts\TicketManagerInterface;
+use TianSchutte\ServiceDeskJira\Contracts\TypeManagerInterface;
+use TianSchutte\ServiceDeskJira\Contracts\UtilityManagerInterface;
 use TianSchutte\ServiceDeskJira\Traits\DeskManagerTrait;
 use TianSchutte\ServiceDeskJira\Traits\IssueManagerTrait;
-use TianSchutte\ServiceDeskJira\Traits\TicketManagerTrait;
+use TianSchutte\ServiceDeskJira\Traits\TypeManagerTrait;
+use TianSchutte\ServiceDeskJira\Traits\UtilityManagerTrait;
 
-class JiraServiceDeskService implements IssueManagerInterface, DeskManagerInterface, TicketManagerInterface
+class JiraServiceDeskService implements IssueManagerInterface, DeskManagerInterface, TypeManagerInterface, UtilityManagerInterface
 {
     use IssueManagerTrait;
     use DeskManagerTrait;
-    use TicketManagerTrait;
+    use TypeManagerTrait;
+    use UtilityManagerTrait;
 
     protected $client;
     protected $project_id;

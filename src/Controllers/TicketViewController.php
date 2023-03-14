@@ -19,6 +19,7 @@ class TicketViewController
         $this->project_id = config('service-desk-jira.project_id');
         $this->jiraServiceDeskService = app('service-desk-jira');
     }
+
     public function showTicketMenu(Request $request)
     {
         return view('service-desk-jira::ticket-menu');
@@ -28,7 +29,7 @@ class TicketViewController
     {
         $tickets = $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
 
-        return view('service-desk-jira::ticket-view-index',[
+        return view('service-desk-jira::ticket-view-index', [
             'tickets' => $tickets
         ]);
     }
@@ -36,9 +37,11 @@ class TicketViewController
     public function show($id)
     {
         $issue = $this->jiraServiceDeskService->getIssue($id);
+        $comments = $this->jiraServiceDeskService->getComments($id)->values;
 
-        return view('service-desk-jira::ticket-view-show',[
+        return view('service-desk-jira::ticket-view-show', [
             'issue' => $issue,
+            'comments' => $comments
         ]);
     }
 

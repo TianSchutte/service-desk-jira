@@ -26,6 +26,24 @@
     </table>
 @endif
 
+<h2>Comments:</h2>
+{{--TODO Add other comments that's on task--}}
+@foreach($comments as $comment)
+    <div>
+        <div>{{ $comment->author->displayName }}</div>
+        <div>{{ $comment->created->friendly }}</div>
+        <div>{{ $comment->body }}</div>
+    </div>
+
+    @if(isset($comment->attachments))
+        @foreach($comment->attachments as $attachment)
+            <a href="{{ $attachment->content }}">{{ $attachment->filename }}</a>
+        @endforeach
+    @endif
+
+@endforeach
+
+
 <h2>Add a comment</h2>
 <form method="post" id="comment_form" action="{{ route('tickets.comments.store') }}">
     @csrf

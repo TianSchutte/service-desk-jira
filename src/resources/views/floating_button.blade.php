@@ -11,7 +11,7 @@
 <div class="floating-button">
     <a href="#" class="button">Click Me!</a>
     <div class="popup">
-        <iframe src="{{route('ticket-menu')}}">Your browser isn't compatible</iframe>
+        <iframe src="{{route('tickets.menu')}}">Your browser isn't compatible</iframe>
     </div>
 </div>
 

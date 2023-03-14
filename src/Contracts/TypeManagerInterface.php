@@ -2,7 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Contracts;
 
-interface TicketManagerInterface
+interface TypeManagerInterface
 {
     public function getTypes(string $serviceDeskId);
     public function getTypeById(string $serviceDeskId, string $requestTypeId);
