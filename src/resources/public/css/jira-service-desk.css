@@ -1,0 +1,246 @@
+/*---------------------- General  ----------------------*/
+input[type="text"],
+input[type="string"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px 16px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid #DADADA;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+    background-color: #FFF;
+    transition: border-bottom-color 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="string"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-bottom-color: #0052CC;
+}
+
+/* Button styles */
+button, input[type="submit"] {
+    background-color: #0052CC;
+    color: #FFF;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #003F8D;
+}
+
+/* Checkbox and radio button styles */
+input[type="checkbox"], input[type="radio"] {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Label styles */
+label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Error message styles */
+.error-message {
+    color: #E74C3C;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+/*---------------------- Unordered List  ----------------------*/
+
+ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+ul li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.4;
+}
+
+ul li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #5E6C84;
+}
+
+ul li:last-child {
+    margin-bottom: 0;
+}
+
+ul li a {
+    color: #0052CC;
+    text-decoration: none;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+}
+
+/*---------------------- File  ----------------------*/
+
+
+input[type="file"] {
+    display: block;
+    margin-bottom: 20px;
+}
+
+input[type="file"]:before {
+    content: 'Choose file';
+    display: inline-block;
+    background-color: #0052CC;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="file"]:hover:before {
+    background-color: #2684FF;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    display: none;
+}
+
+/*---------------------- Table  ----------------------*/
+
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table th, table td {
+    border: 1px solid #DEE2E6;
+    padding: 10px;
+}
+
+table th {
+    background-color: #F4F5F7;
+    font-weight: 600;
+    text-align: left;
+}
+
+table td.label {
+    font-size: 16px;
+}
+/*table tr:nth-child(even) {*/
+/*    background-color: #F8F9FA;*/
+/*}*/
+
+/*table tr:hover {*/
+/*    background-color: #E2E6EA;*/
+/*}*/
+
+/*---------------------- DateTime  ----------------------*/
+
+input[type="datetime-local"] {
+    border: 1px solid #DEE2E6;
+    padding: 8px;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #172B4D;
+}
+
+input[type="datetime-local"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(55, 165, 255, 0.3);
+    border-color: #37a5ff;
+}
+
+/*---------------------- NAV ----------------------*/
+
+nav {
+    /*background-color: #325470;*/
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 18px;
+
+
+}
+
+nav button {
+    list-style-type: none;
+    display: flex;
+    font-size: 14px;
+
+}
+nav button a{
+    display: flex;
+    text-decoration: none;
+    color: white;
+}
+/*---------------------- COMMENTS ----------------------*/
+.comment-container {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f6f6f6;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.comment-timestamp {
+    color: #666;
+}
+
+.comment-body {
+    margin-bottom: 10px;
+}
+
+
+
+
+

@@ -11,15 +11,14 @@ class TicketFormController
     const USERS_FIELD_ID = 'customfield_10003';
 
     private $project_id;
-    /**
-     * @var JiraServiceDeskService
-     */
+
     private $jiraServiceDeskService;
 
     public function __construct()
     {
         $this->project_id = config('service-desk-jira.project_id');
         $this->jiraServiceDeskService = app('service-desk-jira');
+
     }
 
     public function index(Request $request)//step 1
@@ -45,12 +44,12 @@ class TicketFormController
                     $services = $this->jiraServiceDeskService->getServices();
                     break;
                 case self::USERS_FIELD_ID:
+//                    TODO: not all users are being dragged in !!
                     $users = $this->jiraServiceDeskService->getUsers();
                     break;
             }
         }
 
-//        dd($fields);
         return view('service-desk-jira::ticket-form-step-2', [
             'fields' => $fields,
             'requestTypeId' => $requestTypeId,

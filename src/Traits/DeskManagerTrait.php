@@ -2,10 +2,14 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
-use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 
 trait DeskManagerTrait
 {
+    /**
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getInfo()
     {
         $endpoint = 'rest/servicedeskapi/info';
@@ -13,6 +17,10 @@ trait DeskManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getServiceDesks()
     {
         $endpoint = 'rest/servicedeskapi/servicedesk';
@@ -20,6 +28,11 @@ trait DeskManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param $serviceDeskId
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getServiceDeskById($serviceDeskId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}";
@@ -27,6 +40,11 @@ trait DeskManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param $serviceDeskId
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getQueues($serviceDeskId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue";
@@ -34,6 +52,12 @@ trait DeskManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param $serviceDeskId
+     * @param $queueId
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getIssuesInQueue($serviceDeskId, $queueId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue/{$queueId}/issue";

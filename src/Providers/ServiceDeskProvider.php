@@ -22,10 +22,15 @@ class ServiceDeskProvider extends ServiceProvider
      */
     public function boot()
     {
+        //config
         $this->publishes([
             __DIR__ . '/../config/servicedeskjira.php' => config_path('servicedeskjira.php'),
         ], 'config');
 
+        //css
+        $this->publishes([
+            __DIR__ . '/../resources/public' => public_path('vendor/courier'),
+        ], 'public');
 
         $this->setupDefaults();
         $this->setupFloatingButtonMiddleware();
@@ -34,17 +39,14 @@ class ServiceDeskProvider extends ServiceProvider
 
     private function setupDefaults()
     {
-
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'service-desk-jira');
-
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 BaseCommand::class,
             ]);
         }
-
     }
 
     private function setupFloatingButtonMiddleware()
@@ -52,7 +54,6 @@ class ServiceDeskProvider extends ServiceProvider
         $router = $this->app['router'];
         $router->pushMiddlewareToGroup('web', FloatingButtonMiddleware::class);
     }
-
 
     private function setupJiraServiceDeskService()
     {

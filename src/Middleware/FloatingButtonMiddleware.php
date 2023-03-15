@@ -6,6 +6,13 @@ use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\View;
 
+/**
+ * Class FloatingButtonMiddleware
+ * @author Tian Schutte
+ * @description Checks if the response is successful, then retrieves response, renders 'floating_button'
+ *              and appends content of this to response's content string before </body> tag.
+ * @package TianSchutte\ServiceDeskJira
+ */
 class FloatingButtonMiddleware
 {
 
@@ -13,7 +20,9 @@ class FloatingButtonMiddleware
     {
         $response = $next($request);
 
-        if ($response instanceof Response && $response->getStatusCode() == 200) {
+        $isSuccessful = $response instanceof Response && $response->getStatusCode() == 200;
+
+        if ($isSuccessful) {
             $floatingButton = View::make('service-desk-jira::floating_button');
             $content = $response->getContent();
             $post = strripos($content, '</body>');
@@ -23,6 +32,7 @@ class FloatingButtonMiddleware
                 $response->setContent($content);
             }
         }
+
         return $response;
     }
 }

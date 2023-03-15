@@ -1,1 +1,6 @@
-<textarea id="{{ $field->fieldId }}" name="{{ $field->fieldId }}"></textarea>
+<textarea
+    id="{{ $field->fieldId }}"
+    name="{{ $field->fieldId }}"
+    {{$field->required ? 'required' : ''}}>
+
+</textarea>

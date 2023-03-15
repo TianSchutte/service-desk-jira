@@ -28,6 +28,7 @@ class TicketViewController
     public function index(Request $request)
     {
         $tickets = $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
+        //TODO use current logged in user
 
         return view('service-desk-jira::ticket-view-index', [
             'tickets' => $tickets

@@ -1,3 +1,5 @@
+@extends('service-desk-jira::layouts.base')
+@section('content')
 <h2>Request submitted successfully</h2>
 <p>Issue key: {{$issueRequest->issueKey}}</p>
 <p>Created date: {{$issueRequest->createdDate->friendly}}</p>
@@ -19,3 +21,4 @@
         </ul>
     @endif
 @endif
+@endsection

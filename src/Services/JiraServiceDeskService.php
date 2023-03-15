@@ -3,6 +3,8 @@
 namespace TianSchutte\ServiceDeskJira\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use TianSchutte\ServiceDeskJira\Contracts\DeskManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\IssueManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\TypeManagerInterface;
@@ -19,9 +21,21 @@ class JiraServiceDeskService implements IssueManagerInterface, DeskManagerInterf
     use TypeManagerTrait;
     use UtilityManagerTrait;
 
+    /**
+     * @var Client
+     */
     protected $client;
+
+    /**
+     * @var mixed
+     */
     protected $project_id;
 
+    /**
+     * @param $baseUrl
+     * @param $email
+     * @param $apiKey
+     */
     public function __construct($baseUrl, $email, $apiKey)
     {
         $this->client = new Client([

@@ -2,11 +2,15 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
-use http\Client;
-use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Exception\GuzzleException;
 
 trait IssueManagerTrait
 {
+    /**
+     * @param $data
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function createIssue($data)
     {
         $endpoint = 'rest/servicedeskapi/request';
@@ -17,6 +21,11 @@ trait IssueManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param string $issueKey
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getIssue(string $issueKey)
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}";
@@ -25,6 +34,12 @@ trait IssueManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param string $issueKey
+     * @param array $data
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function updateIssue(string $issueKey, array $data)
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}";
@@ -36,15 +51,26 @@ trait IssueManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param string $issueKey
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function deleteIssue(string $issueKey)
     {
-//        DoESNT EXISTS
+//      TODO: Remove  DoESNT EXISTS
         $endpoint = "rest/servicedeskapi/request/{$issueKey}";
         $response = $this->client->delete($endpoint);
 
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param string $issueKey
+     * @param array $data
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function addComment(string $issueKey, array $data)
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}/comment";
@@ -55,6 +81,11 @@ trait IssueManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param string $issueKey
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getComments(string $issueKey)
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}/comment";
@@ -63,6 +94,12 @@ trait IssueManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param string $issueKey
+     * @param $data
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function addAttachment(string $issueKey, $data)
     {
         $endpoint = "rest/servicedeskapi/request/{$issueKey}/attachment";
@@ -74,6 +111,12 @@ trait IssueManagerTrait
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param $serviceDeskId
+     * @param $file
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function attachTemporaryFile($serviceDeskId, $file)
     {
         $endpoint = "/rest/servicedeskapi/servicedesk/$serviceDeskId/attachTemporaryFile";
@@ -92,5 +135,4 @@ trait IssueManagerTrait
 
         return json_decode($response->getBody()->getContents());
     }
-
 }

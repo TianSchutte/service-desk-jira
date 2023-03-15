@@ -1,3 +1,10 @@
-<a href="{{route('tickets.choose')}}">Create a Ticket</a>
+@extends('service-desk-jira::layouts.base')
+@section('content')
 
-<a href="{{route('tickets.index')}}">View My Tickets</a>
+    <h2>Jira Service Desk Options:</h2>
+    <ul>
+        <li><a href="{{route('tickets.choose')}}">Create a Ticket</a></li>
+        <li><a href="{{route('tickets.index')}}">View a Tickets</a></li>
+    </ul>
+
+@endsection

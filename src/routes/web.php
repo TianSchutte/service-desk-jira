@@ -9,7 +9,6 @@ Route::get('/tickets/menu', [TicketViewController::class, 'showTicketMenu'])
     ->name('tickets.menu');
 
 
-
 //View Ticket
 Route::get('/tickets', [TicketViewController::class, 'index'])
     ->name('tickets.index');

@@ -2,7 +2,7 @@
     "name": "tianschutte/service-desk-jira",
     "autoload": {
         "psr-4": {
-            "Root\\ServiceDeskJira\\": "src/"
+            "TianSchutte\\ServiceDeskJira\\": "src/"
         }
     },
     "extra": {

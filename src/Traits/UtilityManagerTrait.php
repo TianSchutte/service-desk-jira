@@ -2,26 +2,44 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
+use GuzzleHttp\Exception\GuzzleException;
+
 trait UtilityManagerTrait
 {
+    /**
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getServices()
     {
         $endpoint = 'rest/service-registry-api/service?query=';
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
-    public function getUsers(){
-        //https://giantprocurement.atlassian.net/rest/servicedesk/1/customer/portal/6/user-search?fieldConfigId=&fieldName=reporter&query=
+    /**
+     * @return mixed
+     * @throws GuzzleException
+     */
+    public function getUsers()
+    {
         $endpoint = "rest/servicedesk/1/customer/portal/{$this->project_id}/user-search?fieldConfigId=&fieldName=reporter&query=";
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
-    public function getUserTickets($userEmail){
-        $endpoint = '/rest/servicedeskapi/request?jql=reporter="' . $userEmail . '"';
-//        TODO add service desk project id specification to above query
+    /**
+     * @param $userEmail
+     * @return mixed
+     * @throws GuzzleException
+     */
+    public function getUserTickets($userEmail)
+    {
+        $endpoint = "/rest/servicedeskapi/request?jql=reporter={$userEmail} AND serviceDeskId={$this->project_id}";
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 }
