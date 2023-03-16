@@ -4,38 +4,35 @@ use Illuminate\Support\Facades\Route;
 use TianSchutte\ServiceDeskJira\Controllers\TicketFormController;
 use TianSchutte\ServiceDeskJira\Controllers\TicketViewController;
 
-//Dynamically create a new route from service provider,
-// add \Illuminate\Session\Middleware\StartSession::class middleware, to this group, and assign
-// these routes to that group. then floating button will not appear on my site aswell
-Route::group(['middleware' => ['web']], function () {
-
-//Ticket Menu
-    Route::get('/tickets/menu', [TicketViewController::class, 'showTicketMenu'])
-        ->name('tickets.menu');
-
-
-//View Ticket
-    Route::get('/tickets', [TicketViewController::class, 'index'])
-        ->name('tickets.index');
-
-    Route::get('/tickets/{id}', [TicketViewController::class, 'show'])
-        ->name('tickets.show');
-
-    Route::post('/tickets/comments', [TicketViewController::class, 'storeComment'])
-        ->name('tickets.comments.store');// {}
+Route::prefix('service-desk-jira')
+    ->middleware([\Illuminate\Session\Middleware\StartSession::class])
+//    ->namespace('ServiceDeskJira\\Providers')
+    ->group(function ()
+    {
+        //Ticket Menu
+        Route::get('/tickets/menu', [TicketViewController::class, 'showTicketMenu'])
+            ->name('tickets.menu');
 
 
-//Create Ticket
-//    Route::get('/tickets/choose', [TicketFormController::class, 'index'])
-//        ->name('tickets.choose'); // .
-    Route::get('/tickets/choose', function (){
-        return 'asd';
-    })->name('tickets.choose');; // .
+        //View Ticket
+        Route::get('/tickets/view', [TicketViewController::class, 'index'])
+            ->name('tickets.view.index');
 
-    Route::post('/tickets/create', [TicketFormController::class, 'show'])
-        ->name('tickets.create');
+        Route::get('/tickets/view/show', [TicketViewController::class, 'show'])
+            ->name('tickets.view.show'); // move outside group
 
-    Route::post('/tickets', [TicketFormController::class, 'store'])
-        ->name('tickets.store');
+        Route::post('/tickets/view/comments', [TicketViewController::class, 'storeComment'])
+            ->name('tickets.view.comments.store');// {}
 
-});
+
+        //Create Ticket
+        Route::get('/tickets/form/index', [TicketFormController::class, 'index'])
+            ->name('tickets.form.index'); // .
+
+        Route::post('/tickets/form/show', [TicketFormController::class, 'show'])
+            ->name('tickets.form.show');
+
+        Route::post('/tickets/form', [TicketFormController::class, 'store'])
+            ->name('tickets.form.store');
+
+    });

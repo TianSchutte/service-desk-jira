@@ -3,19 +3,28 @@
 namespace TianSchutte\ServiceDeskJira\Traits;
 
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
 trait TypeManagerTrait
 {
+
     /**
      * @param string $serviceDeskId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getTypes(string $serviceDeskId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/requesttype";
 
-        $response = $this->client->get($endpoint);
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving types.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
@@ -24,12 +33,19 @@ trait TypeManagerTrait
      * @param string $serviceDeskId
      * @param string $requestTypeId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getTypeById(string $serviceDeskId, string $requestTypeId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/requesttype/{$requestTypeId}";
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving type by id.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
@@ -38,14 +54,21 @@ trait TypeManagerTrait
      * @param string $serviceDeskId
      * @param array $data
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function createType(string $serviceDeskId, array $data)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/requesttype";
-        $response = $this->client->post($endpoint, [
-            'json' => $data
-        ]);
+
+        try {
+            $response = $this->client->post($endpoint, [
+                'json' => $data
+            ]);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating a tickets.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
@@ -54,12 +77,19 @@ trait TypeManagerTrait
      * @param string $serviceDeskId
      * @param string $requestTypeId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getFields(string $serviceDeskId, string $requestTypeId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/requesttype/{$requestTypeId}/field?expand=serviceDesk&expand=requestType";
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving fields.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
@@ -67,12 +97,20 @@ trait TypeManagerTrait
     /**
      * @param string $serviceDeskId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getTypeGroup(string $serviceDeskId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/requesttype/group";
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving type groups.');
+
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
@@ -81,12 +119,19 @@ trait TypeManagerTrait
      * @param string $serviceDeskId
      * @param string $requestTypeId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getTypeFields(string $serviceDeskId, string $requestTypeId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/requesttype/{$requestTypeId}/field";
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving type fields.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }

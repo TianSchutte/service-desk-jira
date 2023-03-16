@@ -19,9 +19,13 @@
             var requestedTicketId = $(this).val();
             $.ajax({
                 type: 'GET',
-                url: '/tickets/' + requestedTicketId,
+                url: '{{ route('tickets.view.show') }}',
+                // url: '/tickets/' + requestedTicketId,
+                //TODO: Change to using parameter in route
+
                 data: {
-                    _token: '{{ csrf_token() }}'
+                    _token: '{{ csrf_token() }}',
+                    request_ticket_id: requestedTicketId,
                 },
                 success: function (data) {
                     $('#select-ticket-results').html(data);

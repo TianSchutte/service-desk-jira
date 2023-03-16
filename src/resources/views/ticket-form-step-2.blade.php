@@ -1,5 +1,5 @@
 @if ($fields)
-    <form method="post" action="{{ route('tickets.store') }}" enctype="multipart/form-data">
+    <form method="post" action="{{ route('tickets.form.store') }}" enctype="multipart/form-data">
         @csrf
         <table>
             @foreach ($fields as $field)

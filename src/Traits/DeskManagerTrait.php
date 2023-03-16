@@ -3,71 +3,113 @@
 namespace TianSchutte\ServiceDeskJira\Traits;
 
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
 trait DeskManagerTrait
 {
+
     /**
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getInfo()
     {
         $endpoint = 'rest/servicedeskapi/info';
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving info.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
 
+
     /**
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getServiceDesks()
     {
         $endpoint = 'rest/servicedeskapi/servicedesk';
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving service desks.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
 
+
     /**
      * @param $serviceDeskId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getServiceDeskById($serviceDeskId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}";
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving service desk by id.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
+
 
     /**
      * @param $serviceDeskId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getQueues($serviceDeskId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue";
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving queues.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }
+
 
     /**
      * @param $serviceDeskId
      * @param $queueId
      * @return mixed
-     * @throws GuzzleException
+     * @throws ServiceDeskException
      */
     public function getIssuesInQueue($serviceDeskId, $queueId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue/{$queueId}/issue";
-        $response = $this->client->get($endpoint);
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving issues in queue.');
+        } catch (\Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
 
         return json_decode($response->getBody()->getContents());
     }

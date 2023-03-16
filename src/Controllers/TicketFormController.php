@@ -3,6 +3,7 @@
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
 use Illuminate\Http\Request;
+use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
 class TicketFormController
 {
@@ -22,23 +23,10 @@ class TicketFormController
 
     public function index(Request $request)//step 1
     {
-
-
         try {
-            $requestTypes = $this->jiraServiceDeskService->getTypes(6)->values;
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-//            session()->put('error', $e->getResponse()->getBody()->getContents());
-//            session()->save();
-//            return back();
-
-//            return view('service-desk-jira::ticket-menu', [
-//                'error' => $e->getResponse()->getBody()->getContents(),
-//            ]);
-
-//            session()->flash('error', $e->getMessage());
-//            return back()->with('success', 'Your success message')->withErrors([$e->getMessage()]);
-
-
+            $requestTypes = $this->jiraServiceDeskService->getTypes($this->project_id)->values;
+        } catch (ServiceDeskException $e) {
+            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
 
         return view('service-desk-jira::ticket-form-step-1', [
@@ -49,28 +37,18 @@ class TicketFormController
     public function show(Request $request)//step 2
     {
         $requestTypeId = $request->input('request_type_id');
-        $fields = $this->jiraServiceDeskService->getFields($this->project_id, $requestTypeId)->requestTypeFields;
-        $services = [];
-        $users = [];
-
-        //todo: maybe seperate this?
-        foreach ($fields as $field) {
-            switch ($field->fieldId) {
-                case self::SERVICES_FIELD_ID:
-                    $services = $this->jiraServiceDeskService->getServices();
-                    break;
-                case self::USERS_FIELD_ID:
-//                    TODO: not all users are being dragged in !!
-                    $users = $this->jiraServiceDeskService->getUsers();
-                    break;
-            }
+        try {
+            $fields = $this->jiraServiceDeskService->getFields($this->project_id, $requestTypeId)->requestTypeFields;
+            $fieldValues = $this->getServiceAndUserFields($fields);
+        } catch (ServiceDeskException $e) {
+            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
 
         return view('service-desk-jira::ticket-form-step-2', [
             'fields' => $fields,
             'requestTypeId' => $requestTypeId,
-            'services' => $services,
-            'users' => $users,
+            'services' => $fieldValues['services'],
+            'users' => $fieldValues['users'],
         ]);
     }
 
@@ -87,7 +65,7 @@ class TicketFormController
 //                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation
             ]);
         } catch (\Exception $e) {
-            dd($e);
+            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
 
         $attachedFiles = $this->AttachFiles($request, $issueRequest);
@@ -97,6 +75,32 @@ class TicketFormController
             'attachedFiles' => $attachedFiles,
             'issueRequest' => $issueRequest,
         ]);
+    }
+
+    /**
+     * @param $fields
+     * @return array
+     */
+    private function getServiceAndUserFields($fields)
+    {
+        $services = [];
+        $users = [];
+
+        foreach ($fields as $field) {
+            switch ($field->fieldId) {
+                case self::SERVICES_FIELD_ID:
+                    $services = $this->jiraServiceDeskService->getServices();
+                    break;
+                case self::USERS_FIELD_ID:
+                    $users = $this->jiraServiceDeskService->getUsers();
+                    break;
+            }
+        }
+
+        return [
+            'services' => $services,
+            'users' => $users,
+        ];
     }
 
 

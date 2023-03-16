@@ -3,6 +3,7 @@
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
 use Illuminate\Http\Request;
+use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
 class TicketViewController
@@ -27,18 +28,23 @@ class TicketViewController
 
     public function index(Request $request)
     {
-        $tickets = $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
-        //TODO use current logged in user
+        try {
+            $tickets = $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
+        } catch (ServiceDeskException $e) {
+            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
+        }
 
         return view('service-desk-jira::ticket-view-index', [
             'tickets' => $tickets
         ]);
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
-        $issue = $this->jiraServiceDeskService->getIssue($id);
-        $comments = $this->jiraServiceDeskService->getComments($id)->values;
+        $requestTicketId = $request->input('request_ticket_id');
+
+        $issue = $this->jiraServiceDeskService->getIssue($requestTicketId);
+        $comments = $this->jiraServiceDeskService->getComments($requestTicketId)->values;
 
         return view('service-desk-jira::ticket-view-show', [
             'issue' => $issue,

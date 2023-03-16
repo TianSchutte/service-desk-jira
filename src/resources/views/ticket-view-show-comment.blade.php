@@ -20,7 +20,7 @@
 
 
 <h2>Add a comment</h2>
-<form method="post" id="comment_form" action="{{ route('tickets.comments.store') }}">
+<form method="post" id="comment_form" action="{{ route('tickets.view.comments.store') }}">
     @csrf
     <input type="hidden" name="issue_key" value="{{$issue->issueKey}}">
     <label for="comment_body">Comment body:</label>

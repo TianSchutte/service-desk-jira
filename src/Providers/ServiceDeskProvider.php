@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Providers;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use TianSchutte\ServiceDeskJira\Console\Commands\BaseCommand;
 use TianSchutte\ServiceDeskJira\Middleware\FloatingButtonMiddleware;
@@ -53,7 +54,6 @@ class ServiceDeskProvider extends ServiceProvider
     {
         $router = $this->app['router'];
         $router->pushMiddlewareToGroup('web', FloatingButtonMiddleware::class);
-
     }
 
     private function setupJiraServiceDeskService()

@@ -12,6 +12,7 @@
 <main>
     @if (request()->route()->getName() !== 'tickets.menu')
         <nav>
+{{--            TODO: make buttons clickable, not text in it--}}
             <button><a href="#" onclick="history.back()" >Back</a></button>
             <button><a href="{{ route('tickets.menu') }}" >Menu</a></button>
         </nav>
