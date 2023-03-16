@@ -53,6 +53,7 @@ class ServiceDeskProvider extends ServiceProvider
     {
         $router = $this->app['router'];
         $router->pushMiddlewareToGroup('web', FloatingButtonMiddleware::class);
+
     }
 
     private function setupJiraServiceDeskService()

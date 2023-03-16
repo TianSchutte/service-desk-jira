@@ -19,7 +19,6 @@ class FloatingButtonMiddleware
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-
         $isSuccessful = $response instanceof Response && $response->getStatusCode() == 200;
 
         if ($isSuccessful) {

@@ -3,7 +3,6 @@
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
 use Illuminate\Http\Request;
-use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
 class TicketFormController
 {
@@ -23,7 +22,24 @@ class TicketFormController
 
     public function index(Request $request)//step 1
     {
-        $requestTypes = $this->jiraServiceDeskService->getTypes($this->project_id)->values;
+
+
+        try {
+            $requestTypes = $this->jiraServiceDeskService->getTypes(6)->values;
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+//            session()->put('error', $e->getResponse()->getBody()->getContents());
+//            session()->save();
+//            return back();
+
+//            return view('service-desk-jira::ticket-menu', [
+//                'error' => $e->getResponse()->getBody()->getContents(),
+//            ]);
+
+//            session()->flash('error', $e->getMessage());
+//            return back()->with('success', 'Your success message')->withErrors([$e->getMessage()]);
+
+
+        }
 
         return view('service-desk-jira::ticket-form-step-1', [
             'requestTypes' => $requestTypes,

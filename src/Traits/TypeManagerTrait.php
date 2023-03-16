@@ -14,6 +14,7 @@ trait TypeManagerTrait
     public function getTypes(string $serviceDeskId)
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/requesttype";
+
         $response = $this->client->get($endpoint);
 
         return json_decode($response->getBody()->getContents());

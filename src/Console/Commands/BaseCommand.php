@@ -14,7 +14,17 @@ class BaseCommand extends Command
     protected $signature = 'sdj:test';
 
     protected $description = 'test';
+    private $project_id;
 
+    private $jiraServiceDeskService;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->project_id = config('service-desk-jira.project_id');
+        $this->jiraServiceDeskService = app('service-desk-jira');
+
+    }
     public function handle()
     {
 //        $requestFieldValues = [
@@ -28,8 +38,9 @@ class BaseCommand extends Command
 //        ];
 
         try {
-//            $response = JiraServiceDeskFacade::getUserTickets('tian@giantprocurement.guru');
-//            dd($response);
+//            $response =  $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
+            $response =  $this->jiraServiceDeskService->getTypes(1);
+            dd($response);
         } catch (\Exception $e) {
             $this->error($e);
         }

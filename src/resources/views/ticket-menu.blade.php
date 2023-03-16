@@ -7,4 +7,18 @@
         <li><a href="{{route('tickets.index')}}">View a Tickets</a></li>
     </ul>
 
+{{--    --}}
+{{--    @dump(session('error'))--}}
+
+
+{{--    @if(isset($error))--}}
+{{--        @dump($error)--}}
+{{--    @endif--}}
+
+{{--    @if(session('error'))--}}
+{{--        <div class="error-message">--}}
+{{--            {{ session('error') }}--}}
+{{--        </div>--}}
+{{--    @endif--}}
+
 @endsection

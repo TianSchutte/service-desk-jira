@@ -3,6 +3,8 @@
 namespace TianSchutte\ServiceDeskJira\Traits;
 
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 
 trait DeskManagerTrait
 {
@@ -14,6 +16,7 @@ trait DeskManagerTrait
     {
         $endpoint = 'rest/servicedeskapi/info';
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -25,6 +28,7 @@ trait DeskManagerTrait
     {
         $endpoint = 'rest/servicedeskapi/servicedesk';
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -37,6 +41,7 @@ trait DeskManagerTrait
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}";
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -49,6 +54,7 @@ trait DeskManagerTrait
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue";
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 
@@ -62,6 +68,7 @@ trait DeskManagerTrait
     {
         $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue/{$queueId}/issue";
         $response = $this->client->get($endpoint);
+
         return json_decode($response->getBody()->getContents());
     }
 }

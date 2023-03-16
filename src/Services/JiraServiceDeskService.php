@@ -40,6 +40,7 @@ class JiraServiceDeskService implements IssueManagerInterface, DeskManagerInterf
     {
         $this->client = new Client([
             'Accept' => 'application/json',
+//            'http_errors' => false,
             'Content-Type' => 'application/json',
 //            'X-Atlassian-Token'=>'no-check',
 //            'X-XSRF-Token'=>'no-check',
