@@ -2,11 +2,9 @@
 
 namespace TianSchutte\ServiceDeskJira\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use TianSchutte\ServiceDeskJira\Console\Commands\BaseCommand;
 use TianSchutte\ServiceDeskJira\Middleware\FloatingButtonMiddleware;
-use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
 
 class ServiceDeskProvider extends ServiceProvider
@@ -35,7 +33,6 @@ class ServiceDeskProvider extends ServiceProvider
 
         $this->setupDefaults();
         $this->setupFloatingButtonMiddleware();
-        $this->setupJiraServiceDeskService();
     }
 
     private function setupDefaults()
@@ -56,13 +53,4 @@ class ServiceDeskProvider extends ServiceProvider
         $router->pushMiddlewareToGroup('web', FloatingButtonMiddleware::class);
     }
 
-    private function setupJiraServiceDeskService()
-    {
-        $this->app->singleton('service-desk-jira', function ($app) {
-            $baseUrl = config('service-desk-jira.base_url');
-            $email = config('service-desk-jira.email');
-            $apiKey = config('service-desk-jira.api_key');
-            return new JiraServiceDeskService($baseUrl, $email, $apiKey);
-        });
-    }
 }

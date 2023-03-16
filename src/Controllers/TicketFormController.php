@@ -2,13 +2,13 @@
 
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
-use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
+use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
 class TicketFormController
 {
@@ -28,10 +28,10 @@ class TicketFormController
     /**
      * TicketFormController constructor.
      */
-    public function __construct()
+    public function __construct(JiraServiceDeskService $jiraServiceDeskService)
     {
         $this->project_id = config('service-desk-jira.project_id');
-        $this->jiraServiceDeskService = app('service-desk-jira');
+        $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
     /**
@@ -62,7 +62,7 @@ class TicketFormController
             $fields = $this->jiraServiceDeskService->getFields($this->project_id, $requestTypeId)->requestTypeFields;
             $fieldValues = $this->getServiceAndUserFields($fields);
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
+            return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
         }
 
         return view('service-desk-jira::ticket-form-show', [
@@ -93,7 +93,7 @@ class TicketFormController
                 'requestFieldValues' => $fieldValues,
                 'serviceDeskId' => $this->project_id,
                 'requestTypeId' => $requestTypeId,
-//                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation/
+//                'raiseOnBehalfOf' => 'rickusvega@gmail.com'// TODO somehow get from GLE/GSC side, also need to have some sort of email validation/
             ]);
         } catch (\Exception $e) {
             return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
@@ -111,8 +111,9 @@ class TicketFormController
     /**
      * @param $fields
      * @return array
+     * @throws ServiceDeskException
      */
-    private function getServiceAndUserFields($fields)
+    private function getServiceAndUserFields($fields): array
     {
         $services = [];
         $users = [];

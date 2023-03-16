@@ -5,9 +5,8 @@
         <label for="select-ticket">Select a ticket:</label>
         <select id="select-ticket" name="select-ticket">
             <option value=""> -- Select a ticket --</option>
-            @foreach($tickets->values as $ticket)
-                <option value="{{$ticket->issueId}}">{{ $ticket->requestTypeId}} - {{ $ticket->issueKey }}
-                    created {{$ticket->createdDate->friendly}}</option>
+            @foreach($tickets as $ticket)
+                <option value="{{$ticket->id}}"> {{ $ticket->key }}</option>
             @endforeach
         </select>
     </form>

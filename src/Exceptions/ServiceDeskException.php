@@ -1,4 +1,5 @@
 <?php
+
 namespace TianSchutte\ServiceDeskJira\Exceptions;
 
 use Exception;

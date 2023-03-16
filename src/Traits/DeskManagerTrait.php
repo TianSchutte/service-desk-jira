@@ -2,10 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
 trait DeskManagerTrait

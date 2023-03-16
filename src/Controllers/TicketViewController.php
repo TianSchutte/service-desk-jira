@@ -15,10 +15,10 @@ class TicketViewController
      */
     private $jiraServiceDeskService;
 
-    public function __construct()
+    public function __construct(JiraServiceDeskService $jiraServiceDeskService)
     {
         $this->project_id = config('service-desk-jira.project_id');
-        $this->jiraServiceDeskService = app('service-desk-jira');
+        $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
     public function showTicketMenu(Request $request)
@@ -29,7 +29,8 @@ class TicketViewController
     public function index(Request $request)
     {
         try {
-            $tickets = $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
+//            TODO query actual email
+            $tickets = $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru')->issues;
         } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
@@ -43,8 +44,13 @@ class TicketViewController
     {
         $requestTicketId = $id;
 
-        $issue = $this->jiraServiceDeskService->getIssue($requestTicketId);
-        $comments = $this->jiraServiceDeskService->getComments($requestTicketId)->values;
+        try {
+            $issue = $this->jiraServiceDeskService->getIssue($requestTicketId);
+            $comments = $this->jiraServiceDeskService->getComments($requestTicketId)->values;
+        } catch (ServiceDeskException $e) {
+            return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
+        }
+
 
         return view('service-desk-jira::ticket-view-show', [
             'issue' => $issue,
@@ -62,8 +68,11 @@ class TicketViewController
             'public' => true,
             //                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation
         ];
-
-        $this->jiraServiceDeskService->addComment($issueKey, $data);
+        try {
+            $this->jiraServiceDeskService->addComment($issueKey, $data);
+        } catch (ServiceDeskException $e) {
+            return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
+        }
 
         return view('service-desk-jira::ticket-menu');
     }

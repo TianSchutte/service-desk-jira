@@ -2,7 +2,6 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 

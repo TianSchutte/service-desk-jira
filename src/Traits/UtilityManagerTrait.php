@@ -59,7 +59,9 @@ trait UtilityManagerTrait
             throw new ServiceDeskException('Service desk not found.');
         }
 
-        $endpoint = "/rest/servicedeskapi/request?jql=reporter={$userEmail} AND serviceDeskId={$this->project_id}";
+        $projectKey = $this->getServiceDeskById($this->project_id)->projectKey;
+
+        $endpoint = "/rest/api/2/search?jql=project = $projectKey AND (reporter = '$userEmail')";
 
         try {
             $response = $this->client->get($endpoint);

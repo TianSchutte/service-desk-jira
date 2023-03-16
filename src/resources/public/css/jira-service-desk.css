@@ -160,6 +160,7 @@ table th {
 table td.label {
     font-size: 16px;
 }
+
 /*table tr:nth-child(even) {*/
 /*    background-color: #F8F9FA;*/
 /*}*/
@@ -206,11 +207,13 @@ nav button {
     font-size: 14px;
 
 }
-nav button a{
+
+nav button a {
     display: flex;
     text-decoration: none;
     color: white;
 }
+
 /*---------------------- COMMENTS ----------------------*/
 .comment-container {
     margin-bottom: 10px;

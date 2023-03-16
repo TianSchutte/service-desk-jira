@@ -7,8 +7,7 @@ use TianSchutte\ServiceDeskJira\Controllers\TicketViewController;
 Route::prefix('service-desk-jira')
     ->middleware([\Illuminate\Session\Middleware\StartSession::class])
 //    ->namespace('ServiceDeskJira\\Providers')
-    ->group(function ()
-    {
+    ->group(function () {
         //Ticket Menu
         Route::get('/tickets/menu', [TicketViewController::class, 'showTicketMenu'])
             ->name('tickets.menu');

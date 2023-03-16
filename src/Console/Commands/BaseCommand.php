@@ -3,6 +3,7 @@
 namespace TianSchutte\ServiceDeskJira\Console\Commands;
 
 use Illuminate\Console\Command;
+use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
 
 /**
  * @package MailWizzSync
@@ -18,13 +19,13 @@ class BaseCommand extends Command
 
     private $jiraServiceDeskService;
 
-    public function __construct()
+    public function __construct(JiraServiceDeskService $jiraServiceDeskService)
     {
         parent::__construct();
         $this->project_id = config('service-desk-jira.project_id');
-        $this->jiraServiceDeskService = app('service-desk-jira');
-
+        $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
+
     public function handle()
     {
 //        $requestFieldValues = [
@@ -39,7 +40,7 @@ class BaseCommand extends Command
 
         try {
 //            $response =  $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
-            $response =  $this->jiraServiceDeskService->getTypes(1);
+            $response = $this->jiraServiceDeskService->getServiceDesks();
             dd($response);
         } catch (\Exception $e) {
             $this->error($e);

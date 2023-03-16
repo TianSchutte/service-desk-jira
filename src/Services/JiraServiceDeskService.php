@@ -32,21 +32,22 @@ class JiraServiceDeskService implements IssueManagerInterface, DeskManagerInterf
     protected $project_id;
 
     /**
-     * @param $baseUrl
-     * @param $email
-     * @param $apiKey
+     * JiraServiceDeskService constructor.
      */
-    public function __construct($baseUrl, $email, $apiKey)
+    public function __construct()
     {
         $this->client = new Client([
             'Accept' => 'application/json',
-//            'http_errors' => false,
             'Content-Type' => 'application/json',
 //            'X-Atlassian-Token'=>'no-check',
 //            'X-XSRF-Token'=>'no-check',
             'X-ExperimentalApi' => 'opt-in',
-            'base_uri' => $baseUrl,
-            'auth' => [$email, $apiKey],
+            'base_uri' => config('service-desk-jira.base_url'),
+            'auth' =>
+                [
+                    config('service-desk-jira.email'),
+                    config('service-desk-jira.api_key')
+                ],
         ]);
 
         $this->project_id = config('service-desk-jira.project_id');
