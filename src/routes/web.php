@@ -18,8 +18,8 @@ Route::prefix('service-desk-jira')
         Route::get('/tickets/view', [TicketViewController::class, 'index'])
             ->name('tickets.view.index');
 
-        Route::get('/tickets/view/show', [TicketViewController::class, 'show'])
-            ->name('tickets.view.show'); // move outside group
+        Route::get('/tickets/view/{id}', [TicketViewController::class, 'show'])
+            ->name('tickets.view.show');
 
         Route::post('/tickets/view/comments', [TicketViewController::class, 'storeComment'])
             ->name('tickets.view.comments.store');// {}
@@ -29,7 +29,7 @@ Route::prefix('service-desk-jira')
         Route::get('/tickets/form/index', [TicketFormController::class, 'index'])
             ->name('tickets.form.index'); // .
 
-        Route::post('/tickets/form/show', [TicketFormController::class, 'show'])
+        Route::get('/tickets/form/{id}', [TicketFormController::class, 'show'])
             ->name('tickets.form.show');
 
         Route::post('/tickets/form', [TicketFormController::class, 'store'])

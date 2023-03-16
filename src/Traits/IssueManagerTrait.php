@@ -22,8 +22,10 @@ trait IssueManagerTrait
             $response = $this->client->post($endpoint, [
                 'json' => $data,
             ]);
+
         } catch (RequestException $e) {
-            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating issue.');
+
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating issue. Please make sure all fields are filled');
         } catch (\Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }

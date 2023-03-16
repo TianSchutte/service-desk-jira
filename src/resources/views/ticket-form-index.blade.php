@@ -11,16 +11,19 @@
             @endforeach
         </select>
     </form>
-
+    @if(session('error'))
+        <div class="error-message">
+            {{ session('error') }}
+        </div>
+    @endif
     <div id="request-form-results"></div>
 
     <script>
         $('#request_type').change(function () {
             var requestTypeId = $(this).val();
             $.ajax({
-                type: 'POST',
-                url: '{{ route('tickets.form.show') }}',
-                //TODO: Change to using parameter in route
+                type: 'GET',
+                url: '{{ route('tickets.form.show', ['id' => ':id']) }}'.replace(':id', requestTypeId),
                 data: {
                     _token: '{{ csrf_token() }}',
                     request_type_id: requestTypeId,

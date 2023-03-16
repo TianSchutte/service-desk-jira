@@ -10,6 +10,9 @@
                             @case('datetime')
                                 @include('service-desk-jira::partials.ticket-form.datetime', ['field' => $field])
                                 @break
+                            @case('date')
+                                @include('service-desk-jira::partials.ticket-form.datetime', ['field' => $field])
+                                @break
                             @case('textarea')
                                 @include('service-desk-jira::partials.ticket-form.textarea', ['field' => $field])
                                 @break
@@ -30,3 +33,4 @@
         <button type="submit">Submit</button>
     </form>
 @endif
+

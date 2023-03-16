@@ -1,5 +1,5 @@
 <input
-    type="datetime-local"
+    type="date"
     id="{{ $field->fieldId }}"
     name="{{ $field->fieldId }}"
     required>

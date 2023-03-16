@@ -39,9 +39,9 @@ class TicketViewController
         ]);
     }
 
-    public function show(Request $request)
+    public function show($id)
     {
-        $requestTicketId = $request->input('request_ticket_id');
+        $requestTicketId = $id;
 
         $issue = $this->jiraServiceDeskService->getIssue($requestTicketId);
         $comments = $this->jiraServiceDeskService->getComments($requestTicketId)->values;

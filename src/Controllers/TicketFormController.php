@@ -2,6 +2,11 @@
 
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
+use Illuminate\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
@@ -10,17 +15,29 @@ class TicketFormController
     const SERVICES_FIELD_ID = 'customfield_10051';
     const USERS_FIELD_ID = 'customfield_10003';
 
+    /**
+     * @var mixed
+     */
     private $project_id;
 
+    /**
+     * @var Application|mixed
+     */
     private $jiraServiceDeskService;
 
+    /**
+     * TicketFormController constructor.
+     */
     public function __construct()
     {
         $this->project_id = config('service-desk-jira.project_id');
         $this->jiraServiceDeskService = app('service-desk-jira');
-
     }
 
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|RedirectResponse
+     */
     public function index(Request $request)//step 1
     {
         try {
@@ -29,14 +46,18 @@ class TicketFormController
             return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
 
-        return view('service-desk-jira::ticket-form-step-1', [
+        return view('service-desk-jira::ticket-form-index', [
             'requestTypes' => $requestTypes,
         ]);
     }
 
-    public function show(Request $request)//step 2
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|RedirectResponse
+     */
+    public function show($id)//step 2
     {
-        $requestTypeId = $request->input('request_type_id');
+        $requestTypeId = $id;
         try {
             $fields = $this->jiraServiceDeskService->getFields($this->project_id, $requestTypeId)->requestTypeFields;
             $fieldValues = $this->getServiceAndUserFields($fields);
@@ -44,7 +65,7 @@ class TicketFormController
             return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
 
-        return view('service-desk-jira::ticket-form-step-2', [
+        return view('service-desk-jira::ticket-form-show', [
             'fields' => $fields,
             'requestTypeId' => $requestTypeId,
             'services' => $fieldValues['services'],
@@ -52,25 +73,35 @@ class TicketFormController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return Application|Factory|View|RedirectResponse
+     */
     public function store(Request $request)
     {
         $requestTypeId = $request->input('request_type_id');
         $fieldValues = $request->except('_token', 'request_type_id', 'attachment');
+
+        foreach ($fieldValues as $key => $value) {
+            if ($value === null) {
+                $fieldValues[$key] = '';
+            }
+        }
 
         try {
             $issueRequest = $this->jiraServiceDeskService->createIssue([
                 'requestFieldValues' => $fieldValues,
                 'serviceDeskId' => $this->project_id,
                 'requestTypeId' => $requestTypeId,
-//                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation
+//                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation/
             ]);
         } catch (\Exception $e) {
-            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
+            return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
         }
 
         $attachedFiles = $this->AttachFiles($request, $issueRequest);
 
-        return view('service-desk-jira::ticket-form-step-3', [
+        return view('service-desk-jira::ticket-form-store', [
             'requestTypeId' => $requestTypeId,
             'attachedFiles' => $attachedFiles,
             'issueRequest' => $issueRequest,
@@ -104,6 +135,11 @@ class TicketFormController
     }
 
 
+    /**
+     * @param $request
+     * @param $issueRequest
+     * @return null|mixed
+     */
     private function AttachFiles($request, $issueRequest)
     {
         if (!$request->hasFile('attachment')) {

@@ -55,7 +55,7 @@ trait UtilityManagerTrait
      */
     public function getUserTickets($userEmail)
     {
-        if(!$this->getServiceDeskById($this->project_id)){
+        if (!$this->getServiceDeskById($this->project_id)) {
             throw new ServiceDeskException('Service desk not found.');
         }
 
@@ -79,7 +79,8 @@ trait UtilityManagerTrait
     public function handleGuzzleErrorResponse($response, $failedMessage = 'Unknown error occurred.')
     {
         $responseBody = json_decode($response->getBody()->getContents(), true);
-        $errorMessage = $responseBody['errorMessage'] ?? $failedMessage;
-        throw new ServiceDeskException($errorMessage);
+        $failedMessage = $responseBody['errorMessage'] ?? $failedMessage;
+
+        throw new ServiceDeskException($failedMessage);
     }
 }

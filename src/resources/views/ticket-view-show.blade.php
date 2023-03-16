@@ -1,3 +1,4 @@
+
 <h2>{{$issue->issueKey}}</h2>
 
 @if ($issue->requestFieldValues)
