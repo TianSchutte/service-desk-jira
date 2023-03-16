@@ -1,5 +1,3 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <style>
     .floating-button {
         position: fixed;
@@ -9,27 +7,48 @@
 
     .popup {
         display: none;
-        background: #F4F5F7;
-        position: absolute;
-        bottom: 50px;
-        right: 0;
-        width: 400px;
-        height: 300px;
+        background: #f6f6f6;
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 90%;
+        max-width: 415px;
+        height: 400px;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
     }
 
     .popup iframe {
         width: 100%;
         height: 100%;
+        border: none;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #0052cc;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .button:hover {
+        background-color: #0065ff;
     }
 </style>
 <div class="floating-button">
-    <a href="#" class="button">Click Me!</a>
+    <a href="#" class="button"> Help</a>
     <div class="popup">
-        <iframe src="{{route('tickets.menu')}}">Your browser isn't compatible</iframe>
+        <iframe src="{{route('tickets.menu')}}"></iframe>
     </div>
 </div>
-
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $('.floating-button .button').on('click', function (e) {
         e.preventDefault();

@@ -3,8 +3,8 @@
 <h2>Ticket submitted successfully</h2>
 <table>
     <tr>
-        <th>Issue Id</th>
-        <td>{{$issueRequest->issueId}}</td>
+        <th>Link</th>
+        <td><a href="{{$issueRequest->_links->web}}"> {{$issueRequest->_links->web}}</a></td>
     </tr>
     <tr>
         <th>Issue Key</th>

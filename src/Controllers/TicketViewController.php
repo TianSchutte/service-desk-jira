@@ -51,7 +51,6 @@ class TicketViewController
             return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
         }
 
-
         return view('service-desk-jira::ticket-view-show', [
             'issue' => $issue,
             'comments' => $comments

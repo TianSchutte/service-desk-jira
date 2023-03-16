@@ -186,19 +186,24 @@ input[type="datetime-local"]:focus {
 }
 
 /*---------------------- NAV ----------------------*/
+.nav-container {
+    margin-bottom: 10px;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    background-color: #f6f6f6;
+    position: relative; /* add position: relative to establish containing block */
+}
 
 nav {
-    /*background-color: #325470;*/
-    height: 20px;
+    height: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 5px 10px;
     color: #FFFFFF;
     font-weight: bold;
-    font-size: 18px;
-
-
+    font-size: 14px;
 }
 
 nav button {
@@ -214,6 +219,12 @@ nav button a {
     color: white;
 }
 
+nav p {
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform: translate(-50%, -50%); /* move the element back by half its width and height */
+}
 /*---------------------- COMMENTS ----------------------*/
 .comment-container {
     margin-bottom: 10px;
@@ -246,4 +257,9 @@ nav button a {
 
 
 
+.base-container {
+    margin-bottom: 10px;
+    padding: 2px;
 
+    /*background-color: #f6f6f6;*/
+}

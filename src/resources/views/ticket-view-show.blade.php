@@ -1,8 +1,14 @@
-
-<h2>{{$issue->issueKey}}</h2>
-
 @if ($issue->requestFieldValues)
     <table>
+
+        <tr>
+            <th>Link</th>
+            <td><a href="{{$issue->_links->web}}"> {{$issue->_links->web}}</a></td>
+        </tr>
+{{--        <tr>--}}
+{{--            <th>Issue Key</th>--}}
+{{--            <td>{{$issue->issueKey}}</td>--}}
+{{--        </tr>--}}
         @foreach ($issue->requestFieldValues as $item)
             <tr>
                 <th>{{ $item->label }}</th>

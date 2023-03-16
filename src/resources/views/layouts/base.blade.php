@@ -10,14 +10,25 @@
 </head>
 <body>
 <main>
-    @if (request()->route()->getName() !== 'tickets.menu')
-        <nav>
-            <a href="#" onclick="history.back()" >Back</a>
-            <a href="{{ route('tickets.menu') }}" >Menu</a>
-        </nav>
-    @endif
 
-    @yield('content')
+    <div class="nav-container">
+        <nav>
+            @if (request()->route()->getName() !== 'tickets.menu')
+                <a href="#" onclick="history.back()">Back</a>
+            @endif
+
+            <p style="color: black">Service Desk</p>
+
+            @if (request()->route()->getName() !== 'tickets.menu')
+                <a href="{{ route('tickets.menu') }}">Menu</a>
+            @endif
+        </nav>
+    </div>
+
+
+    <div class="base-container">
+        @yield('content')
+    </div>
 </main>
 
 </body>

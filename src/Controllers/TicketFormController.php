@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -52,7 +53,7 @@ class TicketFormController
     }
 
     /**
-     * @param Request $request
+     * @param $id
      * @return Application|Factory|View|RedirectResponse
      */
     public function show($id)//step 2
@@ -95,7 +96,7 @@ class TicketFormController
                 'requestTypeId' => $requestTypeId,
 //                'raiseOnBehalfOf' => 'rickusvega@gmail.com'// TODO somehow get from GLE/GSC side, also need to have some sort of email validation/
             ]);
-        } catch (\Exception $e) {
+        } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
         }
 
@@ -150,8 +151,12 @@ class TicketFormController
         $temporaryAttachmentIds = array();
 
         foreach ($request->file('attachment') as $file) {
-            $response = $this->jiraServiceDeskService->attachTemporaryFile($this->project_id, $file);
-            $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
+            try {
+                $response = $this->jiraServiceDeskService->attachTemporaryFile($this->project_id, $file);
+                $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
+            } catch (GuzzleException|ServiceDeskException $e) {
+                return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
+            }
         }
 
         $data = [
@@ -161,7 +166,12 @@ class TicketFormController
                 "body" => "System Attached File."
             ]
         ];
+        try {
+            $addAttachmentResponse = $this->jiraServiceDeskService->addAttachment($issueRequest->issueId, $data);
+        } catch (ServiceDeskException $e) {
+            return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
+        }
 
-        return $this->jiraServiceDeskService->addAttachment($issueRequest->issueId, $data);
+        return $addAttachmentResponse;
     }
 }
