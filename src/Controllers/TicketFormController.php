@@ -59,7 +59,7 @@ class TicketFormController
     public function show($id)
     {
         try {
-            $fields = $this->jiraServiceDeskService->getFields($this->project_id, $id)->requestTypeFields;
+            $fields = $this->jiraServiceDeskService->getFields($id)->requestTypeFields;
             $fieldValues = $this->getServiceAndUserFields($fields);
         } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.form.index')->with('error', $e->getMessage());

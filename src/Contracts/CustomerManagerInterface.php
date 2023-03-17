@@ -6,7 +6,7 @@ interface CustomerManagerInterface
 {
     public function createCustomer($userEmail, $fullName);
 
-    public function addCustomerToServiceDesk($userEmail, $serviceDeskId);
+    public function addCustomerToServiceDesk($userEmail);
 
     public function getCustomers();
 

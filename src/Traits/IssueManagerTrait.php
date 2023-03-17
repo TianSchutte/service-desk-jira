@@ -78,27 +78,6 @@ trait IssueManagerTrait
 
     /**
      * @param string $issueKey
-     * @return mixed
-     * @throws ServiceDeskException
-     */
-    public function deleteIssue(string $issueKey)
-    {
-//      TODO: Remove  DoESNT EXISTS
-        $endpoint = "rest/servicedeskapi/request/{$issueKey}";
-
-        try {
-            $response = $this->client->delete($endpoint);
-        } catch (RequestException $e) {
-            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while deleting issue.');
-        } catch (\Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
-        }
-
-        return json_decode($response->getBody()->getContents());
-    }
-
-    /**
-     * @param string $issueKey
      * @param array $data
      * @return mixed
      * @throws ServiceDeskException

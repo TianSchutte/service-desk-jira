@@ -90,10 +90,10 @@ trait CustomerManagerTrait
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function addCustomerToServiceDesk($userEmail, $serviceDeskId)
+    public function addCustomerToServiceDesk($userEmail)
     {
         //requires add customer to function afaik
-        $endpoint = "/rest/servicedeskapi/servicedesk/{$serviceDeskId}/customer";
+        $endpoint = "/rest/servicedeskapi/servicedesk/{$this->project_id}/customer";
 
         $data = [
             'usernames' => [$userEmail],

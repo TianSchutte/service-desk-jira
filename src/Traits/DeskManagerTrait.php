@@ -70,13 +70,12 @@ trait DeskManagerTrait
 
 
     /**
-     * @param $serviceDeskId
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function getQueues($serviceDeskId)
+    public function getQueues()
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/queue";
 
         try {
             $response = $this->client->get($endpoint);
@@ -91,14 +90,13 @@ trait DeskManagerTrait
 
 
     /**
-     * @param $serviceDeskId
      * @param $queueId
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function getIssuesInQueue($serviceDeskId, $queueId)
+    public function getIssuesInQueue($queueId)
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$serviceDeskId}/queue/{$queueId}/issue";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/queue/{$queueId}/issue";
 
         try {
             $response = $this->client->get($endpoint);

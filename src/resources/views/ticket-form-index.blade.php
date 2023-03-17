@@ -12,11 +12,7 @@
         </select>
     </form>
 
-    @if(session('error'))
-        <div class="error-message">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('service-desk-jira::partials.error-message')
 
     <div id="request-form-results"></div>
 
@@ -27,8 +23,7 @@
                 type: 'GET',
                 url: '{{ route('tickets.form.show', ['id' => ':id']) }}'.replace(':id', requestTypeId),
                 data: {
-                    _token: '{{ csrf_token() }}',
-                    request_type_id: requestTypeId,
+                    _token: '{{ csrf_token() }}'
                 },
                 success: function (data) {
                     $('#request-form-results').html(data);

@@ -6,16 +6,7 @@
         <li><a href="{{route('tickets.view.index')}}">View a Ticket</a></li>
     </ul>
 
-    @if(session('error'))
-        <div class="error-message">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    @if(session('success'))
-        <div class="success-message">
-            {{ session('success') }}
-        </div>
-    @endif
+    @include('service-desk-jira::partials.error-message')
+    @include('service-desk-jira::partials.success-message')
 
 @endsection
