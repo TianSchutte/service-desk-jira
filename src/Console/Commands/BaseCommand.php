@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
@@ -33,7 +34,7 @@ class BaseCommand extends Command
             $response = $this->jiraServiceDeskService->getTypeGroup('tian@giantprocurement.guru');
 //            $response = $this->jiraServiceDeskService->getTypeById('31');
             dd($response);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error($e);
         }
     }

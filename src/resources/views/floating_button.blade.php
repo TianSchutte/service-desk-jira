@@ -12,8 +12,9 @@
         bottom: 80px;
         right: 20px;
         width: 90%;
-        max-width: 415px;
-        height: 400px;
+        max-width: 420px;
+        height: 90%;
+        max-height: 420px;
         box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
         border-radius: 5px;
     }

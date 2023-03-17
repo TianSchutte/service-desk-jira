@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
@@ -20,7 +21,7 @@ trait UtilityManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving services.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 

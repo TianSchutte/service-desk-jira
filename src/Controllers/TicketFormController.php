@@ -48,6 +48,7 @@ class TicketFormController
     }
 
     /**
+     * @param $groupId
      * @return Application|Factory|View|RedirectResponse
      */
     public function group($groupId)

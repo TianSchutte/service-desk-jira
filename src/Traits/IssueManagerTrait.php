@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
@@ -26,7 +27,7 @@ trait IssueManagerTrait
         } catch (RequestException $e) {
 
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating issue. Please make sure all fields are filled');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -46,7 +47,7 @@ trait IssueManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving issue.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -69,7 +70,7 @@ trait IssueManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while updating issue.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -92,7 +93,7 @@ trait IssueManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding comment.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -112,7 +113,7 @@ trait IssueManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while getting comments.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -135,7 +136,7 @@ trait IssueManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding Attachment.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -166,7 +167,7 @@ trait IssueManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while attaching temporary file.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 

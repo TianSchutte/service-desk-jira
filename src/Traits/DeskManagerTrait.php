@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
@@ -20,7 +21,7 @@ trait DeskManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving info.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -40,7 +41,7 @@ trait DeskManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving service desks.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -60,7 +61,7 @@ trait DeskManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving service desk by id.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -80,7 +81,7 @@ trait DeskManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving queues.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -101,7 +102,7 @@ trait DeskManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving issues in queue.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 

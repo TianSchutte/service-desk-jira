@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
@@ -20,7 +21,7 @@ trait TypeManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving types.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -40,7 +41,7 @@ trait TypeManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving type by id.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -62,7 +63,7 @@ trait TypeManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating a tickets.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -82,7 +83,7 @@ trait TypeManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving fields.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -101,7 +102,7 @@ trait TypeManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving type groups.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -121,7 +122,7 @@ trait TypeManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving type fields.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 

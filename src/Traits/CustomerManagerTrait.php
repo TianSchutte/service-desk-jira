@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Traits;
 
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 
@@ -20,7 +21,7 @@ trait CustomerManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving users.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -29,11 +30,11 @@ trait CustomerManagerTrait
 
 
     /**
-     * @param $userEmail
+     * @param string $userEmail
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function getCustomerTickets($userEmail)
+    public function getCustomerTickets(string $userEmail)
     {
         if (!$this->getServiceDesk()) {
             throw new ServiceDeskException('Service desk not found.');
@@ -47,7 +48,7 @@ trait CustomerManagerTrait
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving user tickets.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -55,12 +56,12 @@ trait CustomerManagerTrait
     }
 
     /**
-     * @param $userEmail
-     * @param $fullName
+     * @param string $userEmail
+     * @param string $fullName
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function createCustomer($userEmail, $fullName)
+    public function createCustomer(string $userEmail, string $fullName)
     {
         //Not Used.
         //JIRA administrator global permission is required to create a customer.
@@ -77,7 +78,7 @@ trait CustomerManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating user.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
@@ -85,11 +86,11 @@ trait CustomerManagerTrait
     }
 
     /**
-     * @param $userEmail
+     * @param string $userEmail
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function addCustomerToServiceDesk($userEmail)
+    public function addCustomerToServiceDesk(string $userEmail)
     {
         //requires add customer to function afaik
         $endpoint = "/rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/customer";
@@ -104,7 +105,7 @@ trait CustomerManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding user to service desk.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }
 
