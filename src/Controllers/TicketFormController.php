@@ -2,14 +2,13 @@
 
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
-use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
+use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 class TicketFormController
 {
@@ -28,18 +27,30 @@ class TicketFormController
 
     /**
      * TicketFormController constructor.
-     * @param JiraServiceDeskService $jiraServiceDeskService
+     * @param ServiceDeskService $jiraServiceDeskService
      */
-    public function __construct(JiraServiceDeskService $jiraServiceDeskService)
+    public function __construct(ServiceDeskService $jiraServiceDeskService)
     {
         $this->project_id = config('service-desk-jira.project_id');
         $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
+    public function index()
+    {
+        try {
+            $typeGroups = $this->jiraServiceDeskService->getTypeGroup()->values;
+        } catch (ServiceDeskException $e) {
+            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
+        }
+        return view('service-desk-jira::ticket-form-index', [
+            'typeGroups' => $typeGroups
+        ]);
+    }
+
     /**
      * @return Application|Factory|View|RedirectResponse
      */
-    public function index()
+    public function group($groupId)
     {
         try {
             $requestTypes = $this->jiraServiceDeskService->getTypes()->values;
@@ -47,8 +58,15 @@ class TicketFormController
             return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
 
-        return view('service-desk-jira::ticket-form-index', [
-            'requestTypes' => $requestTypes,
+        $validRequestTypes = [];
+        foreach ($requestTypes as $requestType) {
+            if (in_array($groupId, $requestType->groupIds)) {
+                $validRequestTypes[] = $requestType;
+            }
+        }
+
+        return view('service-desk-jira::ticket-form-group', [
+            'requestTypes' => $validRequestTypes
         ]);
     }
 
@@ -153,7 +171,7 @@ class TicketFormController
             try {
                 $response = $this->jiraServiceDeskService->attachTemporaryFile($file);
                 $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
-            } catch (GuzzleException|ServiceDeskException $e) {
+            } catch (ServiceDeskException $e) {
                 return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
             }
         }
@@ -165,6 +183,7 @@ class TicketFormController
                 "body" => "System Attached File."
             ]
         ];
+
         try {
             $addAttachmentResponse = $this->jiraServiceDeskService->addAttachment($issueRequest->issueId, $data);
         } catch (ServiceDeskException $e) {

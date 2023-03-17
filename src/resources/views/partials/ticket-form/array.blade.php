@@ -17,6 +17,17 @@
         @endforeach
     </select>
 
+@elseif ($field->jiraSchema->items == 'option')
+    <select
+        id="{{ $field->fieldId }}"
+        name="{{ $field->fieldId }}[][id]"
+        multiple
+        {{$field->required? 'required' : ''}}>
+        @foreach ($field->validValues as $option)
+            <option value="{{ $option->value }}">{{ $option->label }}</option>
+        @endforeach
+    </select>
+
 @elseif ($field->jiraSchema->items == 'component')
     <select
         id="{{ $field->fieldId }}"

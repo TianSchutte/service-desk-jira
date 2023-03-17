@@ -3,8 +3,6 @@
 namespace TianSchutte\ServiceDeskJira\Services;
 
 use GuzzleHttp\Client;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Foundation\Application;
 use TianSchutte\ServiceDeskJira\Contracts\CustomerManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\DeskManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\IssueManagerInterface;
@@ -16,7 +14,7 @@ use TianSchutte\ServiceDeskJira\Traits\IssueManagerTrait;
 use TianSchutte\ServiceDeskJira\Traits\TypeManagerTrait;
 use TianSchutte\ServiceDeskJira\Traits\UtilityManagerTrait;
 
-class JiraServiceDeskService implements
+class ServiceDeskService implements
     IssueManagerInterface,
     DeskManagerInterface,
     TypeManagerInterface,

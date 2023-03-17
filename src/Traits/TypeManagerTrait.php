@@ -95,8 +95,7 @@ trait TypeManagerTrait
      */
     public function getTypeGroup()
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttype/group";
-
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttypegroup";
         try {
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {

@@ -5,30 +5,30 @@ namespace TianSchutte\ServiceDeskJira\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
-use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
+use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 class TicketViewController
 {
     private $project_id;
 
     /**
-     * @var JiraServiceDeskService
+     * @var ServiceDeskService
      */
     private $jiraServiceDeskService;
 
-    public function __construct(JiraServiceDeskService $jiraServiceDeskService)
+    public function __construct(ServiceDeskService $jiraServiceDeskService)
     {
         $this->project_id = config('service-desk-jira.project_id');
         $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
-    public function showTicketMenu(Request $request)
+    public function showTicketMenu()
     {
         //check if customer is added to service desk and add if not
         return view('service-desk-jira::ticket-menu');
     }
 
-    public function index(Request $request)
+    public function index()
     {
         try {
 //            TODO query actual email

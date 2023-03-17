@@ -26,8 +26,11 @@ Route::prefix('service-desk-jira')
 
 
         //Create Ticket
-        Route::get('/tickets/form/index', [TicketFormController::class, 'index'])
-            ->name('tickets.form.index'); // .
+        Route::get('/tickets/form/index/', [TicketFormController::class, 'index'])
+            ->name('tickets.form.index');
+
+        Route::get('/tickets/form/index/group/{groupId}', [TicketFormController::class, 'group'])
+            ->name('tickets.form.index.group');
 
         Route::get('/tickets/form/{id}', [TicketFormController::class, 'show'])
             ->name('tickets.form.show');

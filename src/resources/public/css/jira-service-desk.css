@@ -3,6 +3,7 @@ input[type="text"],
 input[type="string"],
 input[type="email"],
 input[type="password"],
+input[type="number"],
 select,
 textarea {
     width: 100%;
@@ -22,6 +23,7 @@ input[type="text"]:focus,
 input[type="string"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
+input[type="number"],
 select:focus,
 textarea:focus {
     outline: none;
