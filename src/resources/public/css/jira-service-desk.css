@@ -70,6 +70,14 @@ label {
     margin-top: 5px;
 }
 
+/* Success message styles */
+.success-message {
+    color: #37a5ff;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
 /*---------------------- Unordered List  ----------------------*/
 
 ul {
@@ -271,6 +279,13 @@ nav p {
     background-color: #f6f6f6;
     display: flex;
     justify-content: center;
+}
+
+.status-container p {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    /*color: #172B4D;*/
 }
 
 .status-container > div {

@@ -2,6 +2,7 @@
 
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
@@ -58,6 +59,10 @@ class TicketViewController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function storeComment(Request $request)
     {
         $issueKey = $request->input('issue_key');
@@ -73,7 +78,6 @@ class TicketViewController
         } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
         }
-
-        return view('service-desk-jira::ticket-menu');
+        return redirect()->route('tickets.menu')->with('success', 'Comment has been added!');
     }
 }

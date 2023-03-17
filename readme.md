@@ -55,3 +55,5 @@ php artisan vendor:publish --tag=public --force
 
 - [Jira: Service Desk Docs](https://docs.atlassian.com/jira-servicedesk/REST/3.6.2/#servicedeskapi)
 
+# Appendix
+- Make sure the user api being used has all required permissions to create and view tickets/users
