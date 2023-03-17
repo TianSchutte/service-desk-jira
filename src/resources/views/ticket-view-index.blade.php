@@ -6,7 +6,7 @@
         <select id="select-ticket" name="select-ticket">
             <option value=""> -- Select a ticket --</option>
             @foreach($tickets as $ticket)
-                <option value="{{$ticket->id}}"> {{ $ticket->key }}</option>
+                <option value="{{$ticket->id}}">{{ $ticket->key }} - {{ $ticket->fields->summary }}</option>
             @endforeach
         </select>
     </form>

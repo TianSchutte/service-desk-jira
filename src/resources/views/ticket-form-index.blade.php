@@ -7,15 +7,17 @@
             <option value=""> -- Select a ticket --</option>
 
             @foreach ($requestTypes as $requestType)
-                <option value="{{ $requestType->id }}">{{ $requestType->id }} - {{ $requestType->name }}</option>
+                <option value="{{ $requestType->id }}">{{ $requestType->name }}</option>
             @endforeach
         </select>
     </form>
+
     @if(session('error'))
         <div class="error-message">
             {{ session('error') }}
         </div>
     @endif
+
     <div id="request-form-results"></div>
 
     <script>

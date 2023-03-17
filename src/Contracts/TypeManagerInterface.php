@@ -15,4 +15,5 @@ interface TypeManagerInterface
     public function getTypeGroup(string $serviceDeskId);
 
     public function getTypeFields(string $serviceDeskId, string $requestTypeId);
+
 }

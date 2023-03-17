@@ -28,6 +28,7 @@ class TicketFormController
 
     /**
      * TicketFormController constructor.
+     * @param JiraServiceDeskService $jiraServiceDeskService
      */
     public function __construct(JiraServiceDeskService $jiraServiceDeskService)
     {
@@ -36,10 +37,9 @@ class TicketFormController
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View|RedirectResponse
      */
-    public function index(Request $request)//step 1
+    public function index()
     {
         try {
             $requestTypes = $this->jiraServiceDeskService->getTypes($this->project_id)->values;
@@ -53,14 +53,13 @@ class TicketFormController
     }
 
     /**
-     * @param $id
+     * @param $id //requestTypeId
      * @return Application|Factory|View|RedirectResponse
      */
-    public function show($id)//step 2
+    public function show($id)
     {
-        $requestTypeId = $id;
         try {
-            $fields = $this->jiraServiceDeskService->getFields($this->project_id, $requestTypeId)->requestTypeFields;
+            $fields = $this->jiraServiceDeskService->getFields($this->project_id, $id)->requestTypeFields;
             $fieldValues = $this->getServiceAndUserFields($fields);
         } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
@@ -68,7 +67,7 @@ class TicketFormController
 
         return view('service-desk-jira::ticket-form-show', [
             'fields' => $fields,
-            'requestTypeId' => $requestTypeId,
+            'requestTypeId' => $id,
             'services' => $fieldValues['services'],
             'users' => $fieldValues['users'],
         ]);
@@ -125,7 +124,7 @@ class TicketFormController
                     $services = $this->jiraServiceDeskService->getServices();
                     break;
                 case self::USERS_FIELD_ID:
-                    $users = $this->jiraServiceDeskService->getUsers();
+                    $users = $this->jiraServiceDeskService->getCustomers();
                     break;
             }
         }

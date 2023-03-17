@@ -1,13 +1,14 @@
 <?php
 
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use TianSchutte\ServiceDeskJira\Controllers\TicketFormController;
 use TianSchutte\ServiceDeskJira\Controllers\TicketViewController;
 
 Route::prefix('service-desk-jira')
-    ->middleware([\Illuminate\Session\Middleware\StartSession::class])
-//    ->namespace('ServiceDeskJira\\Providers')
+    ->middleware([StartSession::class])
     ->group(function () {
+
         //Ticket Menu
         Route::get('/tickets/menu', [TicketViewController::class, 'showTicketMenu'])
             ->name('tickets.menu');

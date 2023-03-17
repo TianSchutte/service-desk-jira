@@ -161,13 +161,13 @@ table td.label {
     font-size: 16px;
 }
 
-/*table tr:nth-child(even) {*/
-/*    background-color: #F8F9FA;*/
-/*}*/
+table tr:nth-child(even) {
+    background-color: #F8F9FA;
+}
 
-/*table tr:hover {*/
-/*    background-color: #E2E6EA;*/
-/*}*/
+table tr:hover {
+    background-color: #E2E6EA;
+}
 
 /*---------------------- DateTime  ----------------------*/
 
@@ -225,6 +225,7 @@ nav p {
     top: 5%;
     transform: translate(-50%, -50%); /* move the element back by half its width and height */
 }
+
 /*---------------------- COMMENTS ----------------------*/
 .comment-container {
     margin-bottom: 10px;
@@ -255,11 +256,28 @@ nav p {
 }
 
 
-
-
 .base-container {
     margin-bottom: 10px;
     padding: 2px;
 
     /*background-color: #f6f6f6;*/
+}
+
+.status-container {
+    margin-bottom: 10px;
+    padding: 4px;
+    border: 1px solid #172B4D;
+    border-radius: 2px;
+    background-color: #f6f6f6;
+    display: flex;
+    justify-content: center;
+}
+
+.status-container > div {
+    /*background-color: #f1f1f1;*/
+    width: 125px;
+    margin: 10px;
+    text-align: center;
+    padding: 4px;
+
 }

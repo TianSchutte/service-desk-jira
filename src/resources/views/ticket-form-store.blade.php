@@ -4,15 +4,7 @@
 <table>
     <tr>
         <th>Link</th>
-        <td><a href="{{$issueRequest->_links->web}}"> {{$issueRequest->_links->web}}</a></td>
-    </tr>
-    <tr>
-        <th>Issue Key</th>
-        <td>{{$issueRequest->issueKey}}</td>
-    </tr>
-    <tr>
-        <th>Created Date</th>
-        <td>{{$issueRequest->createdDate->friendly}}</td>
+        <td><a href="{{$issueRequest->_links->web}}">Jira Service Desk</a></td>
     </tr>
     <tr>
         <th>Reporter Name</th>
@@ -26,6 +18,14 @@
         <th>Current Status</th>
         <td>{{$issueRequest->currentStatus->status}}</td>
     </tr>
+    <tr>
+        <th>Issue Key</th>
+        <td>{{$issueRequest->issueKey}}</td>
+    </tr>
+    <tr>
+        <th>Created Date</th>
+        <td>{{$issueRequest->createdDate->friendly}}</td>
+    </tr>
 </table>
 
 
@@ -34,11 +34,7 @@
         <h3>Attached files:</h3>
         <ul>
             @foreach($attachedFiles->attachments->values as $attachment)
-                <li>{{$attachment->filename}}</li>
-                {{--             Uncomment the following lines if you want to display images--}}
-                {{--            @if($attachment->mimeType == 'image/png')--}}
-                {{--                <img src="{{$attachment->links->content}}" alt="{{$attachment->filename}}">--}}
-                {{--            @endif--}}
+                <li><a href="{{$attachment->_links->content}}" target="_blank" >{{$attachment->filename}}</a></li>
             @endforeach
         </ul>
     @endif

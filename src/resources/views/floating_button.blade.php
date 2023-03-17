@@ -42,13 +42,16 @@
         background-color: #0065ff;
     }
 </style>
+
 <div class="floating-button">
     <a href="#" class="button"> Help</a>
     <div class="popup">
         <iframe src="{{route('tickets.menu')}}"></iframe>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $('.floating-button .button').on('click', function (e) {
         e.preventDefault();

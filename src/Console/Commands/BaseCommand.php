@@ -28,24 +28,13 @@ class BaseCommand extends Command
 
     public function handle()
     {
-//        $requestFieldValues = [
-//            "serviceDeskId" => "6",
-//            "requestTypeId" => "88",
-//            "requestFieldValues" => [
-//                "summary" => "mmmmmmm",
-////                "customfield_10003"=> "62e7abf83cc20c06c8ae1849",
-//                "description" => "mmmmm"
-//            ]
-//        ];
-
         try {
 //            $response =  $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
-            $response = $this->jiraServiceDeskService->getServiceDesks();
+            $response = $this->jiraServiceDeskService->addCustomerToServiceDesk('tian@giantprocurement.guru', $this->project_id);
             dd($response);
         } catch (\Exception $e) {
             $this->error($e);
         }
-
     }
 
 }

@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\View;
 class FloatingButtonMiddleware
 {
 
+    /**
+     * @param $request
+     * @param Closure $next
+     * @return Response|mixed
+     */
     public function handle($request, Closure $next)
     {
         $response = $next($request);

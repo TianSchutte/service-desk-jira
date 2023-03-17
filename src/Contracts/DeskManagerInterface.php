@@ -13,4 +13,5 @@ interface DeskManagerInterface
     public function getQueues($serviceDeskId);
 
     public function getIssuesInQueue($serviceDeskId, $queueId);
+
 }

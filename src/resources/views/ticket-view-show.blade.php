@@ -1,14 +1,21 @@
+@if($issue->currentStatus)
+    <div class="status-container">
+       <p>
+           Ticket <strong>{{$issue->issueKey}}</strong>
+           is in category <strong>{{ $issue->currentStatus->statusCategory }}</strong>
+           with status of <strong>{{ $issue->currentStatus->status }} </strong>
+           since <strong>{{ $issue->currentStatus->statusDate->friendly }}</strong>
+       </p>
+    </div>
+@endif
+
+
 @if ($issue->requestFieldValues)
     <table>
-
         <tr>
             <th>Link</th>
-            <td><a href="{{$issue->_links->web}}"> {{$issue->_links->web}}</a></td>
+            <td><a href="{{$issue->_links->web}}">Jira Service Desk</a></td>
         </tr>
-{{--        <tr>--}}
-{{--            <th>Issue Key</th>--}}
-{{--            <td>{{$issue->issueKey}}</td>--}}
-{{--        </tr>--}}
         @foreach ($issue->requestFieldValues as $item)
             <tr>
                 <th>{{ $item->label }}</th>

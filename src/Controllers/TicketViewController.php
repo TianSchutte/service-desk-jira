@@ -23,6 +23,7 @@ class TicketViewController
 
     public function showTicketMenu(Request $request)
     {
+        //check if customer is added to service desk and add if not
         return view('service-desk-jira::ticket-menu');
     }
 
@@ -30,7 +31,7 @@ class TicketViewController
     {
         try {
 //            TODO query actual email
-            $tickets = $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru')->issues;
+            $tickets = $this->jiraServiceDeskService->getCustomerTickets('tian@giantprocurement.guru')->issues;
         } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
