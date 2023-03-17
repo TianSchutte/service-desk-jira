@@ -16,7 +16,7 @@ trait IssueManagerTrait
      */
     public function createIssue($data)
     {
-        $endpoint = 'rest/servicedeskapi/request';
+        $endpoint = "rest/servicedeskapi/request";
 
         try {
             $response = $this->client->post($endpoint, [
@@ -143,15 +143,13 @@ trait IssueManagerTrait
     }
 
     /**
-     * @param $serviceDeskId
      * @param $file
      * @return mixed
-     * @throws GuzzleException
      * @throws ServiceDeskException
      */
-    public function attachTemporaryFile($serviceDeskId, $file)
+    public function attachTemporaryFile($file)
     {
-        $endpoint = "/rest/servicedeskapi/servicedesk/$serviceDeskId/attachTemporaryFile";
+        $endpoint = "/rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/attachTemporaryFile";
 
         try {
             $response = $this->client->post($endpoint, [

@@ -30,7 +30,7 @@ class BaseCommand extends Command
     {
         try {
 //            $response =  $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
-            $response = $this->jiraServiceDeskService->addCustomerToServiceDesk('tian@giantprocurement.guru', $this->project_id);
+            $response = $this->jiraServiceDeskService->addCustomerToServiceDesk('tian@giantprocurement.guru');
             dd($response);
         } catch (\Exception $e) {
             $this->error($e);

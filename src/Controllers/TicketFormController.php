@@ -42,7 +42,7 @@ class TicketFormController
     public function index()
     {
         try {
-            $requestTypes = $this->jiraServiceDeskService->getTypes($this->project_id)->values;
+            $requestTypes = $this->jiraServiceDeskService->getTypes()->values;
         } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.menu')->with('error', $e->getMessage());
         }
@@ -151,7 +151,7 @@ class TicketFormController
 
         foreach ($request->file('attachment') as $file) {
             try {
-                $response = $this->jiraServiceDeskService->attachTemporaryFile($this->project_id, $file);
+                $response = $this->jiraServiceDeskService->attachTemporaryFile($file);
                 $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
             } catch (GuzzleException|ServiceDeskException $e) {
                 return redirect()->route('tickets.form.index')->with('error', $e->getMessage());

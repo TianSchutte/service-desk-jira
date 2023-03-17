@@ -14,7 +14,7 @@ trait TypeManagerTrait
      */
     public function getTypes()
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/requesttype";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttype";
 
         try {
             $response = $this->client->get($endpoint);
@@ -28,14 +28,13 @@ trait TypeManagerTrait
     }
 
     /**
-     * @param string $serviceDeskId
      * @param string $requestTypeId
      * @return mixed
      * @throws ServiceDeskException
      */
     public function getTypeById(string $requestTypeId)
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/requesttype/{$requestTypeId}";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttype/{$requestTypeId}";
 
         try {
             $response = $this->client->get($endpoint);
@@ -49,14 +48,13 @@ trait TypeManagerTrait
     }
 
     /**
-     * @param string $serviceDeskId
      * @param array $data
      * @return mixed
      * @throws ServiceDeskException
      */
     public function createType(array $data)
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/requesttype";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttype";
 
         try {
             $response = $this->client->post($endpoint, [
@@ -78,7 +76,7 @@ trait TypeManagerTrait
      */
     public function getFields(string $requestTypeId)
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/requesttype/{$requestTypeId}/field?expand=serviceDesk&expand=requestType";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttype/{$requestTypeId}/field?expand=serviceDesk&expand=requestType";
 
         try {
             $response = $this->client->get($endpoint);
@@ -97,7 +95,7 @@ trait TypeManagerTrait
      */
     public function getTypeGroup()
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/requesttype/group";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttype/group";
 
         try {
             $response = $this->client->get($endpoint);
@@ -118,7 +116,7 @@ trait TypeManagerTrait
      */
     public function getTypeFields(string $requestTypeId)
     {
-        $endpoint = "rest/servicedeskapi/servicedesk/{$this->project_id}/requesttype/{$requestTypeId}/field";
+        $endpoint = "rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/requesttype/{$requestTypeId}/field";
 
         try {
             $response = $this->client->get($endpoint);

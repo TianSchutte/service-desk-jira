@@ -16,4 +16,6 @@ interface IssueManagerInterface
 
     public function getComments(string $issueKey);
 
+    public function attachTemporaryFile($file);
+
 }

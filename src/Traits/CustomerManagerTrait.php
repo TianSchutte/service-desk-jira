@@ -14,7 +14,7 @@ trait CustomerManagerTrait
      */
     public function getCustomers()
     {
-        $endpoint = "rest/servicedesk/1/customer/portal/{$this->project_id}/user-search?fieldConfigId=&fieldName=reporter&query=";
+        $endpoint = "rest/servicedesk/1/customer/portal/{$this->serviceDeskId}/user-search?fieldConfigId=&fieldName=reporter&query=";
 
         try {
             $response = $this->client->get($endpoint);
@@ -35,11 +35,11 @@ trait CustomerManagerTrait
      */
     public function getCustomerTickets($userEmail)
     {
-        if (!$this->getServiceDeskById($this->project_id)) {
+        if (!$this->getServiceDesk()) {
             throw new ServiceDeskException('Service desk not found.');
         }
 
-        $projectKey = $this->getServiceDeskById($this->project_id)->projectKey;
+        $projectKey = $this->getServiceDesk()->projectKey;
 
         $endpoint = "/rest/api/2/search?jql=project = $projectKey AND (reporter = '$userEmail')&fields=summary";
 
@@ -86,14 +86,13 @@ trait CustomerManagerTrait
 
     /**
      * @param $userEmail
-     * @param $serviceDeskId
      * @return mixed
      * @throws ServiceDeskException
      */
     public function addCustomerToServiceDesk($userEmail)
     {
         //requires add customer to function afaik
-        $endpoint = "/rest/servicedeskapi/servicedesk/{$this->project_id}/customer";
+        $endpoint = "/rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/customer";
 
         $data = [
             'usernames' => [$userEmail],

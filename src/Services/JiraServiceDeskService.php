@@ -36,9 +36,9 @@ class JiraServiceDeskService implements
     protected $client;
 
     /**
-     * @var mixed
+     * @var string|int|mixed
      */
-    protected $project_id;
+    protected $serviceDeskId;
 
     /**
      * JiraServiceDeskService constructor.
@@ -59,6 +59,6 @@ class JiraServiceDeskService implements
                 ],
         ]);
 
-        $this->project_id = config('service-desk-jira.project_id');
+        $this->serviceDeskId = config('service-desk-jira.project_id');
     }
 }
