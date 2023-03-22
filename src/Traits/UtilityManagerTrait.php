@@ -33,8 +33,18 @@ trait UtilityManagerTrait
      */
     public function handleGuzzleErrorResponse($response, $failedMessage = 'Unknown error occurred.')
     {
-        $responseBody = json_decode($response->getBody()->getContents(), true);
-        $failedMessage = $responseBody['errorMessage'] ?? $failedMessage;
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode >= 400 && $statusCode < 500) {
+            $responseBody = json_decode($response->getBody()->getContents(), true);
+//            $failedMessage = $responseBody['errorMessages'][0] ?? $failedMessage; //Invalid request payload. Refer to the REST API documentation and try again.
+            $failedMessage = "Invalid request. Please make sure all fields are filled.";
+        } elseif ($statusCode >= 500 && $statusCode < 600) {
+            $failedMessage = 'A server error occurred. Please try again later.';
+        } else {
+            $responseBody = json_decode($response->getBody()->getContents(), true);
+            $failedMessage = $responseBody['errorMessages'][0] ?? $failedMessage;
+        }
 
         throw new ServiceDeskException($failedMessage);
     }

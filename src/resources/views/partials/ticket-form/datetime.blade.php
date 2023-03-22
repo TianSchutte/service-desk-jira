@@ -2,5 +2,6 @@
     type="datetime-local"
     id="{{ $field->fieldId }}"
     name="{{ $field->fieldId }}"
-    required>
-{{--    {{$field->required ? 'required' : ''}}>--}}
+    value="{{old($field->fieldId)}}"
+{{--    required>--}}
+    {{$field->required ? 'required' : ''}}>

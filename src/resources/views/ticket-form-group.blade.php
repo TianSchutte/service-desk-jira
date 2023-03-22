@@ -1,33 +1,19 @@
 @extends('service-desk-jira::layouts.base')
 @section('content')
-<form id="request-form">
-    <label for="request_type">Select a request type:</label>
-    <select id="request_type" name="request_type">
-        <option value=""> -- Select a ticket --</option>
+    <label for="group_request_type">Select a Group:</label>
 
+    <div class="card-list">
         @foreach ($requestTypes as $requestType)
-            <option value="{{ $requestType->id }}">{{ $requestType->name }}</option>
+            <a href="{{ route('tickets.form.show', ['id' => $requestType->id]) }}" class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ $requestType->name }}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ $requestType->description }}</p>
+                </div>
+            </a>
+
         @endforeach
-    </select>
-</form>
+    </div>
 
-@include('service-desk-jira::partials.error-message')
-
-<div id="request-form-results"></div>
-
-<script>
-    $('#request_type').change(function () {
-        var requestTypeId = $(this).val();
-        $.ajax({
-            type: 'GET',
-            url: '{{ route('tickets.form.show', ['id' => ':id']) }}'.replace(':id', requestTypeId),
-            data: {
-                _token: '{{ csrf_token() }}'
-            },
-            success: function (data) {
-                $('#request-form-results').html(data);
-            },
-        });
-    });
-</script>
 @endsection

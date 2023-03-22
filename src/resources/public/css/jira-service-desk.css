@@ -298,3 +298,66 @@ nav p {
     padding: 4px;
 
 }
+
+/* Styling for the card list */
+.card-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none; /* remove bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+/* Styling for each card */
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    max-width: 400px;
+    margin: 7px;
+    text-decoration: none;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the card header */
+.card-header {
+    padding: 16px;
+    border-bottom: 1px solid #EBECF0;
+}
+
+/* Styling for the card title */
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #172B4D;
+    margin: 0;
+}
+
+/* Styling for the card body */
+.card-body {
+    padding: 14px;
+}
+
+/* Styling for the card text */
+.card-text {
+    font-size: 14px;
+    color: #172B4D;
+    margin: 0;
+}
+/* Styling for the card hover effect */
+.card:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* add a shadow on hover */
+}
+
+
+.footer-email-container {
+    background-color: #F6F6F6;
+    padding: 5px;
+    font-size: 12px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}

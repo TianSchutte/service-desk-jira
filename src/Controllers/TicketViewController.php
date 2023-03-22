@@ -4,6 +4,7 @@ namespace TianSchutte\ServiceDeskJira\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
@@ -24,17 +25,35 @@ class TicketViewController
 
     public function showTicketMenu()
     {
-        //check if customer is added to service desk and add if not
-        return view('service-desk-jira::ticket-menu');
+        $actions = [];
+        $user_email = null;
+
+        if (Auth::user() !== null) {
+            $user_email = Auth::user()->email;
+            $actions = [
+                0 => [
+                    'name' => 'Create a Ticket',
+                    'url' => route('tickets.form.index')
+                ],
+                1 => [
+                    'name' => 'View a Ticket',
+                    'url' => route('tickets.view.index')
+                ]
+            ];
+        }
+
+        return view('service-desk-jira::ticket-menu', [
+            'actions' => $actions,
+            'user_email' => $user_email
+        ]);
     }
 
     public function index()
     {
         try {
-//            TODO query actual email
-            $tickets = $this->jiraServiceDeskService->getCustomerTickets('tian@giantprocurement.guru')->issues;
+            $tickets = $this->jiraServiceDeskService->getCustomerTickets(Auth::user()->email)->issues;
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
 
         return view('service-desk-jira::ticket-view-index', [
@@ -50,7 +69,7 @@ class TicketViewController
             $issue = $this->jiraServiceDeskService->getIssue($requestTicketId);
             $comments = $this->jiraServiceDeskService->getComments($requestTicketId)->values;
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
 
         return view('service-desk-jira::ticket-view-show', [
@@ -71,13 +90,14 @@ class TicketViewController
         $data = [
             'body' => $commentBody,
             'public' => true,
-            //                'raiseOnBehalfOf' => 'rickusvega@gmail.com' TODO somehow get from GLE/GSC side, also need to have some sort of email validation
+            'raiseOnBehalfOf' => Auth::user()->email
         ];
         try {
             $this->jiraServiceDeskService->addComment($issueKey, $data);
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
+
         return redirect()->route('tickets.menu')->with('success', 'Comment has been added!');
     }
 }

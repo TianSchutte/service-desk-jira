@@ -7,14 +7,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 class TicketFormController
 {
-    const SERVICES_FIELD_ID = 'customfield_10051';
-    const USERS_FIELD_ID = 'customfield_10003';
-
     /**
      * @var mixed
      */
@@ -40,8 +38,9 @@ class TicketFormController
         try {
             $typeGroups = $this->jiraServiceDeskService->getTypeGroup()->values;
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
+
         return view('service-desk-jira::ticket-form-index', [
             'typeGroups' => $typeGroups
         ]);
@@ -56,7 +55,7 @@ class TicketFormController
         try {
             $requestTypes = $this->jiraServiceDeskService->getTypes()->values;
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.menu')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
 
         $validRequestTypes = [];
@@ -80,12 +79,14 @@ class TicketFormController
         try {
             $fields = $this->jiraServiceDeskService->getFields($id)->requestTypeFields;
             $fieldValues = $this->getServiceAndUserFields($fields);
+            $typeValues = $this->jiraServiceDeskService->getTypeById($id);
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
 
         return view('service-desk-jira::ticket-form-show', [
             'fields' => $fields,
+            'requestType' => $typeValues,
             'requestTypeId' => $id,
             'services' => $fieldValues['services'],
             'users' => $fieldValues['users'],
@@ -101,21 +102,26 @@ class TicketFormController
         $requestTypeId = $request->input('request_type_id');
         $fieldValues = $request->except('_token', 'request_type_id', 'attachment');
 
-        foreach ($fieldValues as $key => $value) {
-            if ($value === null) {
-                $fieldValues[$key] = '';
-            }
-        }
+        $validatedData = $request->validate([
+            'summary' => 'required',
+            'description' => 'required'
+        ]);
+
+//        foreach ($fieldValues as $key => $value) {
+//            if ($value === null) {
+//                $fieldValues[$key] = '';
+//            }
+//        }
 
         try {
             $issueRequest = $this->jiraServiceDeskService->createIssue([
                 'requestFieldValues' => $fieldValues,
                 'serviceDeskId' => $this->project_id,
                 'requestTypeId' => $requestTypeId,
-//                'raiseOnBehalfOf' => 'rickusvega@gmail.com'// TODO somehow get from GLE/GSC side, also need to have some sort of email validation/
+                'raiseOnBehalfOf' => Auth::user()->email
             ]);
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
 
         $attachedFiles = $this->AttachFiles($request, $issueRequest);
@@ -134,15 +140,18 @@ class TicketFormController
      */
     private function getServiceAndUserFields($fields): array
     {
+         $SERVICES_FIELD_ID = config('service-desk-jira.field_ids.service_field_id');
+         $USER_FIELD_ID = config('service-desk-jira.field_ids.user_field_id');
+
         $services = [];
         $users = [];
 
         foreach ($fields as $field) {
             switch ($field->fieldId) {
-                case self::SERVICES_FIELD_ID:
+                case $SERVICES_FIELD_ID:
                     $services = $this->jiraServiceDeskService->getServices();
                     break;
-                case self::USERS_FIELD_ID:
+                case $USER_FIELD_ID:
                     $users = $this->jiraServiceDeskService->getCustomers();
                     break;
             }
@@ -173,22 +182,22 @@ class TicketFormController
                 $response = $this->jiraServiceDeskService->attachTemporaryFile($file);
                 $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
             } catch (ServiceDeskException $e) {
-                return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
+                return back()->with('error', $e->getMessage())->withInput();
             }
         }
 
         $data = [
             'temporaryAttachmentIds' => $temporaryAttachmentIds,
             'public' => true,
-            "additionalComment" => [
-                "body" => "System Attached File."
+            'additionalComment' => [
+                'body' => 'System Attached File.'
             ]
         ];
 
         try {
             $addAttachmentResponse = $this->jiraServiceDeskService->addAttachment($issueRequest->issueId, $data);
         } catch (ServiceDeskException $e) {
-            return redirect()->route('tickets.form.index')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage())->withInput();
         }
 
         return $addAttachmentResponse;

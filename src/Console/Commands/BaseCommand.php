@@ -4,6 +4,7 @@ namespace TianSchutte\ServiceDeskJira\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Auth;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 /**
@@ -30,8 +31,10 @@ class BaseCommand extends Command
     public function handle()
     {
         try {
-//            $response =  $this->jiraServiceDeskService->getUserTickets('tian@giantprocurement.guru');
-            $response = $this->jiraServiceDeskService->getTypeGroup('tian@giantprocurement.guru');
+//            $email = Auth::user()->email;
+            dd( Auth::user());
+//            $response =  $this->jiraServiceDeskService->getCustomerTickets($email);
+//            $response = $this->jiraServiceDeskService->getTypeGroup('tian@giantprocu1rement.guru');
 //            $response = $this->jiraServiceDeskService->getTypeById('31');
             dd($response);
         } catch (Exception $e) {
