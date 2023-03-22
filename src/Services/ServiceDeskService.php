@@ -8,6 +8,7 @@ use TianSchutte\ServiceDeskJira\Contracts\DeskManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\IssueManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\TypeManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\UtilityManagerInterface;
+use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 use TianSchutte\ServiceDeskJira\Traits\CustomerManagerTrait;
 use TianSchutte\ServiceDeskJira\Traits\DeskManagerTrait;
 use TianSchutte\ServiceDeskJira\Traits\IssueManagerTrait;
@@ -58,5 +59,95 @@ class ServiceDeskService implements
         ]);
 
         $this->serviceDeskId = config('service-desk-jira.project_id');
+    }
+
+    /**
+     * @param $request
+     * @param $issueRequest
+     * @return null|mixed
+     */
+    public function AttachFiles($request, $issueRequest)
+    {
+        if (!$request->hasFile('attachment')) {
+            return null;
+        }
+
+        $temporaryAttachmentIds = array();
+
+        foreach ($request->file('attachment') as $file) {
+            try {
+                $response = $this->attachTemporaryFile($file);
+                $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
+            } catch (ServiceDeskException $e) {
+                return back()->with('error', $e->getMessage())->withInput();
+            }
+        }
+
+        $data = [
+            'temporaryAttachmentIds' => $temporaryAttachmentIds,
+            'public' => true,
+            'additionalComment' => [
+                'body' => 'System Attached File.'
+            ],
+        ];
+
+        try {
+            $addAttachmentResponse = $this->addAttachment($issueRequest->issueId, $data);
+        } catch (ServiceDeskException $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+
+        return $addAttachmentResponse;
+    }
+
+    /**
+     * @param $fields
+     * @return array
+     * @throws ServiceDeskException
+     */
+    public function getServiceAndUserFields($fields): array
+    {
+        $SERVICES_FIELD_ID = config('service-desk-jira.field_ids.service_field_id');
+        $USER_FIELD_ID = config('service-desk-jira.field_ids.user_field_id');
+
+        $services = [];
+        $users = [];
+
+        foreach ($fields as $field) {
+            switch ($field->fieldId) {
+                case $SERVICES_FIELD_ID:
+                    $services = $this->getServices();
+                    break;
+                case $USER_FIELD_ID:
+                    $users = $this->getCustomers();
+                    break;
+            }
+        }
+
+        return [
+            'services' => $services,
+            'users' => $users,
+        ];
+    }
+
+    /**
+     * @throws ServiceDeskException
+     */
+    public function handleGuzzleErrorResponse($response, $failedMessage = 'Unknown error occurred.')
+    {
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode >= 400 && $statusCode < 500) {
+//            $responseBody = json_decode($response->getBody()->getContents(), true);
+//            $failedMessage = $responseBody['errorMessages'][0] ?? $failedMessage; //Invalid request payload. Refer to the REST API documentation and try again.
+            $failedMessage = 'Invalid request. Please make sure all fields are filled.';
+        } elseif ($statusCode >= 500 && $statusCode < 600) {
+            $failedMessage = 'A server error occurred. Please try again later.';
+        } else {
+            $responseBody = json_decode($response->getBody()->getContents(), true);
+            $failedMessage = $responseBody['errorMessages'][0] ?? $failedMessage;
+        }
+
+        throw new ServiceDeskException($failedMessage);
     }
 }

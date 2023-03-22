@@ -3,6 +3,7 @@
 namespace TianSchutte\ServiceDeskJira\Console\Commands;
 
 use Exception;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
@@ -33,10 +34,10 @@ class BaseCommand extends Command
         try {
 //            $email = Auth::user()->email;
             dd( Auth::user());
-//            $response =  $this->jiraServiceDeskService->getCustomerTickets($email);
+
 //            $response = $this->jiraServiceDeskService->getTypeGroup('tian@giantprocu1rement.guru');
 //            $response = $this->jiraServiceDeskService->getTypeById('31');
-            dd($response);
+//            dd($response);
         } catch (Exception $e) {
             $this->error($e);
         }

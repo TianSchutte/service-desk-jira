@@ -9,6 +9,28 @@ use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 trait CustomerManagerTrait
 {
 
+    //todo: add to contract
+    /**
+     * @param $customerEmail
+     * @return mixed
+     * @throws ServiceDeskException
+     */
+    public function getCustomerByEmail($customerEmail)
+    {
+        $endpoint = "rest/servicedesk/1/customer/portal/{$this->serviceDeskId}/user-search?fieldConfigId=&fieldName=reporter&query=emailAddress='{$customerEmail}'";
+
+        try {
+            $response = $this->client->get($endpoint);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving users.');
+        } catch (Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
+
+        return json_decode($response->getBody()->getContents());
+    }
+
+
     /**
      * @return mixed
      * @throws ServiceDeskException

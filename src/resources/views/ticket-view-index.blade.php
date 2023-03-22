@@ -11,6 +11,8 @@
         </select>
     </form>
 
+    @include('service-desk-jira::partials.error-message')
+
     <div id="select-ticket-results"></div>
 
     <script>

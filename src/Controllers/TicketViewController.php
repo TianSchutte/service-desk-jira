@@ -2,6 +2,9 @@
 
 namespace TianSchutte\ServiceDeskJira\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,19 +13,23 @@ use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 class TicketViewController
 {
-    private $project_id;
-
     /**
      * @var ServiceDeskService
      */
     private $jiraServiceDeskService;
 
+    /**
+     * TicketViewController constructor.
+     * @param ServiceDeskService $jiraServiceDeskService
+     */
     public function __construct(ServiceDeskService $jiraServiceDeskService)
     {
-        $this->project_id = config('service-desk-jira.project_id');
         $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
+    /**
+     * @return Application|Factory|View
+     */
     public function showTicketMenu()
     {
         $actions = [];
@@ -48,6 +55,9 @@ class TicketViewController
         ]);
     }
 
+    /**
+     * @return Application|Factory|View|RedirectResponse
+     */
     public function index()
     {
         try {
@@ -61,6 +71,10 @@ class TicketViewController
         ]);
     }
 
+    /**
+     * @param $id
+     * @return Application|Factory|View|RedirectResponse
+     */
     public function show($id)
     {
         $requestTicketId = $id;
@@ -88,14 +102,14 @@ class TicketViewController
         $commentBody = $request->input('comment_body');
 
         $data = [
-            'body' => $commentBody,
+            'body' => Auth::user()->email.' : '.$commentBody,
             'public' => true,
-            'raiseOnBehalfOf' => Auth::user()->email
+//            'raiseOnBehalfOf' => Auth::user()->email //todo this functionality is not included in jira for this endpoint
         ];
         try {
             $this->jiraServiceDeskService->addComment($issueKey, $data);
         } catch (ServiceDeskException $e) {
-            return back()->with('error', $e->getMessage())->withInput();
+            return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
         }
 
         return redirect()->route('tickets.menu')->with('success', 'Comment has been added!');

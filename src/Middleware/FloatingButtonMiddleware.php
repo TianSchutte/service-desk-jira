@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\View;
  * Class FloatingButtonMiddleware
  * @author Tian Schutte
  * @description Checks if the response is successful, then retrieves response, renders 'floating_button'
- *              and appends content of this to response's content string before </body> tag.
+ *              and appends content of this to response's content string before </body> tag. Al so firstly checks
+ *              if the request is a request from the service-desk-jira package, if so, it will not append the floating button.
  * @package TianSchutte\ServiceDeskJira
  */
 class FloatingButtonMiddleware
@@ -26,7 +27,7 @@ class FloatingButtonMiddleware
         $response = $next($request);
 
         if ($request->is('service-desk-jira*')) {
-            return $next($request);
+            return $response;
         }
 
         $isSuccessful = $response instanceof Response && $response->getStatusCode() == 200;

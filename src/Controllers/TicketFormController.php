@@ -33,6 +33,9 @@ class TicketFormController
         $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
+    /**
+     * @return Application|Factory|View|RedirectResponse
+     */
     public function index()
     {
         try {
@@ -78,7 +81,7 @@ class TicketFormController
     {
         try {
             $fields = $this->jiraServiceDeskService->getFields($id)->requestTypeFields;
-            $fieldValues = $this->getServiceAndUserFields($fields);
+            $fieldValues = $this->jiraServiceDeskService->getServiceAndUserFields($fields);
             $typeValues = $this->jiraServiceDeskService->getTypeById($id);
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();
@@ -107,12 +110,6 @@ class TicketFormController
             'description' => 'required'
         ]);
 
-//        foreach ($fieldValues as $key => $value) {
-//            if ($value === null) {
-//                $fieldValues[$key] = '';
-//            }
-//        }
-
         try {
             $issueRequest = $this->jiraServiceDeskService->createIssue([
                 'requestFieldValues' => $fieldValues,
@@ -124,7 +121,13 @@ class TicketFormController
             return back()->with('error', $e->getMessage())->withInput();
         }
 
-        $attachedFiles = $this->AttachFiles($request, $issueRequest);
+        $attachedFiles = $this->jiraServiceDeskService->AttachFiles($request, $issueRequest);
+
+        try {
+            $this->assignAssignee($issueRequest->issueKey);
+        }catch (ServiceDeskException $e) {
+            //quietly fail
+        }
 
         return view('service-desk-jira::ticket-form-store', [
             'requestTypeId' => $requestTypeId,
@@ -134,72 +137,18 @@ class TicketFormController
     }
 
     /**
-     * @param $fields
-     * @return array
+     * @param $issueKey
+     * @return void
      * @throws ServiceDeskException
      */
-    private function getServiceAndUserFields($fields): array
+    private function assignAssignee($issueKey)
     {
-         $SERVICES_FIELD_ID = config('service-desk-jira.field_ids.service_field_id');
-         $USER_FIELD_ID = config('service-desk-jira.field_ids.user_field_id');
+        $customerTickets = $this->jiraServiceDeskService->getCustomerByEmail(
+            config('service-desk-jira.default_assignee')
+        );
 
-        $services = [];
-        $users = [];
-
-        foreach ($fields as $field) {
-            switch ($field->fieldId) {
-                case $SERVICES_FIELD_ID:
-                    $services = $this->jiraServiceDeskService->getServices();
-                    break;
-                case $USER_FIELD_ID:
-                    $users = $this->jiraServiceDeskService->getCustomers();
-                    break;
-            }
-        }
-
-        return [
-            'services' => $services,
-            'users' => $users,
-        ];
-    }
-
-
-    /**
-     * @param $request
-     * @param $issueRequest
-     * @return null|mixed
-     */
-    private function AttachFiles($request, $issueRequest)
-    {
-        if (!$request->hasFile('attachment')) {
-            return null;
-        }
-
-        $temporaryAttachmentIds = array();
-
-        foreach ($request->file('attachment') as $file) {
-            try {
-                $response = $this->jiraServiceDeskService->attachTemporaryFile($file);
-                $temporaryAttachmentIds[] = $response->temporaryAttachments[0]->temporaryAttachmentId;
-            } catch (ServiceDeskException $e) {
-                return back()->with('error', $e->getMessage())->withInput();
-            }
-        }
-
-        $data = [
-            'temporaryAttachmentIds' => $temporaryAttachmentIds,
-            'public' => true,
-            'additionalComment' => [
-                'body' => 'System Attached File.'
-            ]
-        ];
-
-        try {
-            $addAttachmentResponse = $this->jiraServiceDeskService->addAttachment($issueRequest->issueId, $data);
-        } catch (ServiceDeskException $e) {
-            return back()->with('error', $e->getMessage())->withInput();
-        }
-
-        return $addAttachmentResponse;
+        $assignee = $this->jiraServiceDeskService->addAssignee($issueKey, [
+            'accountId' => $customerTickets[0]->accountId,
+        ]);
     }
 }

@@ -24,7 +24,6 @@ trait IssueManagerTrait
             ]);
 
         } catch (RequestException $e) {
-
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating issue. Please make sure all fields are filled');
         } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
@@ -166,6 +165,24 @@ trait IssueManagerTrait
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while attaching temporary file.');
+        } catch (Exception $e) {
+            throw new ServiceDeskException($e->getMessage());
+        }
+
+        return json_decode($response->getBody()->getContents());
+    }
+
+    public function addAssignee(string $issueKey, array $data)
+    {
+        $endpoint = "rest/api/2/issue/{$issueKey}/assignee";
+
+        try {
+
+            $response = $this->client->put($endpoint, [
+                'json' => $data
+            ]);
+        } catch (RequestException $e) {
+            $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding assignee.');
         } catch (Exception $e) {
             throw new ServiceDeskException($e->getMessage());
         }

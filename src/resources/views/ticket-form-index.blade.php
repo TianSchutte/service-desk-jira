@@ -1,6 +1,6 @@
 @extends('service-desk-jira::layouts.base')
 @section('content')
-    <label for="group_request_type">Select a Type:</label>
+    <label for="group_request_type">Select a Group:</label>
 
     <div class="card-list">
         @foreach ($typeGroups as $typeGroup)
