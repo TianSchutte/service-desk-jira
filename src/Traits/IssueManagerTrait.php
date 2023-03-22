@@ -158,11 +158,12 @@ trait IssueManagerTrait
                 'multipart' => [
                     [
                         'name' => 'file',
-                        'contents' => $file,
+                        'contents' => file_get_contents($file->getPathname()),
                         'filename' => $file->getClientOriginalName()
                     ]
                 ]
             ]);
+
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while attaching temporary file.');
         } catch (Exception $e) {

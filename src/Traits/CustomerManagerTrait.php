@@ -9,13 +9,12 @@ use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 trait CustomerManagerTrait
 {
 
-    //todo: add to contract
     /**
-     * @param $customerEmail
+     * @param string $customerEmail
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function getCustomerByEmail($customerEmail)
+    public function getCustomerByEmail(string $customerEmail)
     {
         $endpoint = "rest/servicedesk/1/customer/portal/{$this->serviceDeskId}/user-search?fieldConfigId=&fieldName=reporter&query=emailAddress='{$customerEmail}'";
 

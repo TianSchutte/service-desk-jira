@@ -122,7 +122,7 @@ class TicketFormController
         }
 
         $attachedFiles = $this->jiraServiceDeskService->AttachFiles($request, $issueRequest);
-
+//dd($attachedFiles);
         try {
             $this->assignAssignee($issueRequest->issueKey);
         }catch (ServiceDeskException $e) {

@@ -29,6 +29,13 @@ interface CustomerManagerInterface
     public function getCustomers();
 
     /**
+     * Returns the customer with the specified email.
+     * @param string $customerEmail The email of the customer.
+     * @return mixed
+     */
+    public function getCustomerByEmail(string $customerEmail);
+
+    /**
      * Returns tickets for the specified customer email.
      * @param string $userEmail The email of the customer.
      * @return mixed
