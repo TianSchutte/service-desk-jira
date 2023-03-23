@@ -51,7 +51,6 @@ class ServiceDeskProvider extends ServiceProvider
 
     private function setupFloatingButtonMiddleware()
     {
-//        TODO look into adding a kernel file to package and adding it from there
         $router = $this->app['router'];
         $router->pushMiddlewareToGroup('web', FloatingButtonMiddleware::class);
     }

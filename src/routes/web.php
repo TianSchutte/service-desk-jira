@@ -6,7 +6,6 @@ use TianSchutte\ServiceDeskJira\Controllers\TicketMenuController;
 use TianSchutte\ServiceDeskJira\Controllers\TicketViewController;
 
 Route::prefix('service-desk-jira')
-//    ->middleware([StartSession::class])
     ->middleware(['web'])
     ->group(function () {
 

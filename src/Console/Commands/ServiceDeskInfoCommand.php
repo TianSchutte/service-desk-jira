@@ -13,18 +13,33 @@ use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
  */
 class ServiceDeskInfoCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected $signature = 'service-desk:info';
 
+    /**
+     * @var string
+     */
     protected $description = 'Display information about the package\'s configuration and status';
 
+    /**
+     * @var ServiceDeskService
+     */
     private $jiraServiceDeskService;
 
+    /**
+     * @param ServiceDeskService $jiraServiceDeskService
+     */
     public function __construct(ServiceDeskService $jiraServiceDeskService)
     {
         parent::__construct();
         $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         try {

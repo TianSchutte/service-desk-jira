@@ -3,9 +3,7 @@
 namespace TianSchutte\ServiceDeskJira\Console\Commands;
 
 use Exception;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Auth;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 /**
@@ -15,18 +13,33 @@ use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
  */
 class ListTicketsByEmailCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected $signature = 'service-desk:list-tickets {customerEmail}';
 
+    /**
+     * @var string
+     */
     protected $description = 'List all tickets submitted by the given user in Jira Service Desk.';
 
+    /**
+     * @var ServiceDeskService
+     */
     private $jiraServiceDeskService;
 
+    /**
+     * @param ServiceDeskService $jiraServiceDeskService
+     */
     public function __construct(ServiceDeskService $jiraServiceDeskService)
     {
         parent::__construct();
         $this->jiraServiceDeskService = $jiraServiceDeskService;
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         try {
@@ -35,7 +48,7 @@ class ListTicketsByEmailCommand extends Command
             $issues = $this->jiraServiceDeskService->getCustomerTickets($customerEmail)->issues;
 
             if (count($issues) > 0) {
-                $this->info($customerEmail.'\'s Jira Service Desk Tickets:');
+                $this->info($customerEmail . '\'s Jira Service Desk Tickets:');
                 foreach ($issues as $issue) {
                     $this->line('- ' . $issue->key . ': ' . $issue->fields->summary);
                 }

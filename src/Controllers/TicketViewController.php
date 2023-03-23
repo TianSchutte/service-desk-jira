@@ -79,7 +79,7 @@ class TicketViewController
         $commentBody = $request->input('comment_body');
 
         $data = [
-            'body' => Auth::user()->email.' : '.$commentBody,
+            'body' => Auth::user()->email . ' : ' . $commentBody,
             'public' => true,
 //            'raiseOnBehalfOf' => Auth::user()->email //todo this functionality is not included in jira for this endpoint
         ];
