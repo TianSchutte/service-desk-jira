@@ -40,7 +40,9 @@
     }
 
     .button:hover {
-        background-color: #0065ff;
+        background-color: #003380;
+        color: #fff;
+        text-decoration: none;
     }
 </style>
 
