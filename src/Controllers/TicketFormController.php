@@ -106,6 +106,12 @@ class TicketFormController
      */
     public function store(Request $request)
     {
+        $userEmail = optional(Auth::user())->email;
+
+        if (!$userEmail) {
+            return redirect()->route('tickets.menu')->with('error', 'You must be logged in to create a ticket.')->withInput();
+        }
+
         $request->validate([
             'summary' => 'required',
             'description' => 'required'
@@ -119,7 +125,7 @@ class TicketFormController
                 'requestFieldValues' => $fieldValues,
                 'serviceDeskId' => $this->serviceDeskId,
                 'requestTypeId' => $requestTypeId,
-                'raiseOnBehalfOf' => Auth::user()->email
+                'raiseOnBehalfOf' => $userEmail
             ]);
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();

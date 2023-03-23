@@ -32,8 +32,14 @@ class TicketViewController
      */
     public function index()
     {
+        $userEmail = optional(Auth::user())->email;
+
+        if (!$userEmail) {
+            return redirect()->route('tickets.menu')->with('error', 'You must be logged in to create a ticket.')->withInput();
+        }
+
         try {
-            $tickets = $this->serviceDesk->getCustomerTickets(Auth::user()->email)->issues;
+            $tickets = $this->serviceDesk->getCustomerTickets($userEmail)->issues;
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }

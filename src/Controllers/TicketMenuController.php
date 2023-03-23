@@ -17,9 +17,9 @@ class TicketMenuController
     public function index()
     {
         $actions = [];
-        $user_email = optional(Auth::user())->email;
+        $userEmail = optional(Auth::user())->email;
 
-        if ($user_email) {
+        if ($userEmail) {
             $actions = [
                 0 => [
                     'name' => 'Create a Ticket',
@@ -34,7 +34,7 @@ class TicketMenuController
 
         return view('service-desk-jira::ticket-menu', [
             'actions' => $actions,
-            'user_email' => $user_email
+            'user_email' => $userEmail
         ]);
     }
 }
