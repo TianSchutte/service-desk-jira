@@ -4,7 +4,7 @@
 
     <div class="card-list">
         @foreach ($typeGroups as $typeGroup)
-            <a href="{{ route('tickets.form.index.group', ['groupId' => $typeGroup->id]) }}" class="card">
+            <a href="{{ route('tickets.form.group', ['groupId' => $typeGroup->id]) }}" class="card">
                 <div class="card-header">
                     <h3 class="card-title">{{ $typeGroup->name }}</h3>
                 </div>

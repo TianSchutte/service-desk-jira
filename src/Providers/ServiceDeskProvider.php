@@ -10,6 +10,9 @@ use TianSchutte\ServiceDeskJira\Middleware\FloatingButtonMiddleware;
 
 class ServiceDeskProvider extends ServiceProvider
 {
+    /**
+     * @return void
+     */
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/servicedeskjira.php', 'service-desk-jira');
@@ -36,6 +39,9 @@ class ServiceDeskProvider extends ServiceProvider
         $this->setupFloatingButtonMiddleware();
     }
 
+    /**
+     * @return void
+     */
     private function setupDefaults()
     {
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
@@ -49,6 +55,9 @@ class ServiceDeskProvider extends ServiceProvider
         }
     }
 
+    /**
+     * @return void
+     */
     private function setupFloatingButtonMiddleware()
     {
         $router = $this->app['router'];

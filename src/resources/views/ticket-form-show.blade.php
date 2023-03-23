@@ -10,6 +10,7 @@
 
             <table>
                 <caption><h2>{{$requestType->name}}</h2></caption>
+                <caption><p>{{$requestType->description}}</p></caption>
                 @foreach ($fields as $field)
                     <tr>
                         <td><label for="{{ $field->fieldId }}">{{ $field->name }}</label></td>

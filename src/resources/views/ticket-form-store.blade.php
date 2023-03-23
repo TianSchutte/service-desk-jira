@@ -1,7 +1,7 @@
 @extends('service-desk-jira::layouts.base')
 @section('content')
-    <h2>Ticket submitted successfully</h2>
     <table>
+        <caption><h2>Ticket submitted successfully</h2></caption>
         <tr>
             <th>Link</th>
             <td><a href="{{$issueRequest->_links->web}}">Jira Service Desk</a></td>

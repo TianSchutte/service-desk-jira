@@ -138,9 +138,7 @@ class ServiceDeskService implements
         $statusCode = $response->getStatusCode();
 
         if ($statusCode >= 400 && $statusCode < 500) {
-//            $responseBody = json_decode($response->getBody()->getContents(), true);
-//            $failedMessage = $responseBody['errorMessages'][0] ?? $failedMessage; //Invalid request payload. Refer to the REST API documentation and try again.
-            $failedMessage = 'Invalid request. Please make sure all fields are filled.';
+            $failedMessage = 'Invalid request. Please make sure all fields are filled in.';
         } elseif ($statusCode >= 500 && $statusCode < 600) {
             $failedMessage = 'A server error occurred. Please try again later.';
         } else {

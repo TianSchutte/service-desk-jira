@@ -130,7 +130,6 @@ class TicketFormController
         }
 
         return view('service-desk-jira::ticket-form-store', [
-            'requestTypeId' => $requestTypeId,
             'attachedFiles' => $attachedFiles,
             'issueRequest' => $issueRequest,
         ]);
