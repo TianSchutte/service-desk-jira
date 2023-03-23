@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use TianSchutte\ServiceDeskJira\Controllers\TicketFormController;
+use TianSchutte\ServiceDeskJira\Controllers\TicketMenuController;
 use TianSchutte\ServiceDeskJira\Controllers\TicketViewController;
 
 Route::prefix('service-desk-jira')
@@ -11,7 +11,7 @@ Route::prefix('service-desk-jira')
     ->group(function () {
 
         //Ticket Menu
-        Route::get('/tickets/menu', [TicketViewController::class, 'showTicketMenu'])
+        Route::get('/tickets/menu', [TicketMenuController::class, 'index'])
             ->name('tickets.menu');
 
 

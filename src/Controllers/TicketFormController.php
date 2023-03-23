@@ -102,13 +102,13 @@ class TicketFormController
      */
     public function store(Request $request)
     {
-        $requestTypeId = $request->input('request_type_id');
-        $fieldValues = $request->except('_token', 'request_type_id', 'attachment');
-
         $validatedData = $request->validate([
             'summary' => 'required',
             'description' => 'required'
         ]);
+
+        $requestTypeId = $request->input('request_type_id');
+        $fieldValues = $request->except('_token', 'request_type_id', 'attachment');
 
         try {
             $issueRequest = $this->jiraServiceDeskService->createIssue([
@@ -122,10 +122,10 @@ class TicketFormController
         }
 
         $attachedFiles = $this->jiraServiceDeskService->AttachFiles($request, $issueRequest);
-//dd($attachedFiles);
+
         try {
             $this->assignAssignee($issueRequest->issueKey);
-        }catch (ServiceDeskException $e) {
+        } catch (ServiceDeskException $e) {
             //quietly fail
         }
 

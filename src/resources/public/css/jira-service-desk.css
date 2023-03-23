@@ -346,6 +346,7 @@ nav p {
     color: #172B4D;
     margin: 0;
 }
+
 /* Styling for the card hover effect */
 .card:hover {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* add a shadow on hover */

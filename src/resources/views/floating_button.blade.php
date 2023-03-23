@@ -45,7 +45,7 @@
 </style>
 
 <div class="floating-button">
-    <a href="#" class="button"> Help</a>
+    <a href="#" class="button">Help</a>
     <div class="popup">
         <iframe src="{{route('tickets.menu')}}"></iframe>
     </div>

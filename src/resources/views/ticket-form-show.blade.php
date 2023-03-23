@@ -1,8 +1,11 @@
 @extends('service-desk-jira::layouts.base')
 @section('content')
-    @if ($fields)
 
-        <form method="post" action="{{ route('tickets.form.store') }}" enctype="multipart/form-data">
+    @if ($fields)
+        <form method="post"
+              action="{{ route('tickets.form.store') }}"
+              id="ticket-form-store"
+              enctype="multipart/form-data">
             @csrf
 
             <table>
@@ -36,9 +39,14 @@
             </table>
             <input type="hidden" name="request_type_id" value="{{ $requestTypeId }}">
             @include('service-desk-jira::partials.error-message')
-
-            <button type="submit">Submit</button>
+            <button type="submit" id="submit">Submit</button>
         </form>
     @endif
+
+    <script>
+        $('#ticket-form-store').on('submit', function () {
+            $('#submit').prop('disabled', true);
+        });
+    </script>
 
 @endsection

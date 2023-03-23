@@ -28,34 +28,6 @@ class TicketViewController
     }
 
     /**
-     * @return Application|Factory|View
-     */
-    public function showTicketMenu()
-    {
-        $actions = [];
-        $user_email = null;
-
-        if (Auth::user() !== null) {
-            $user_email = Auth::user()->email;
-            $actions = [
-                0 => [
-                    'name' => 'Create a Ticket',
-                    'url' => route('tickets.form.index')
-                ],
-                1 => [
-                    'name' => 'View a Ticket',
-                    'url' => route('tickets.view.index')
-                ]
-            ];
-        }
-
-        return view('service-desk-jira::ticket-menu', [
-            'actions' => $actions,
-            'user_email' => $user_email
-        ]);
-    }
-
-    /**
      * @return Application|Factory|View|RedirectResponse
      */
     public function index()

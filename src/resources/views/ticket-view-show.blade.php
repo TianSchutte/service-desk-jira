@@ -1,4 +1,3 @@
-
 @if($issue->currentStatus)
     <div class="status-container">
        <p>
@@ -9,7 +8,6 @@
        </p>
     </div>
 @endif
-
 
 @if ($issue->requestFieldValues)
     <table>
