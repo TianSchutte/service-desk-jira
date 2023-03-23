@@ -102,7 +102,7 @@ class TicketFormController
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'summary' => 'required',
             'description' => 'required'
         ]);

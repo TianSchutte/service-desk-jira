@@ -3,7 +3,8 @@
 namespace TianSchutte\ServiceDeskJira\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use TianSchutte\ServiceDeskJira\Console\Commands\BaseCommand;
+use TianSchutte\ServiceDeskJira\Console\Commands\ListTicketsByEmailCommand;
+use TianSchutte\ServiceDeskJira\Console\Commands\ServiceDeskInfoCommand;
 use TianSchutte\ServiceDeskJira\Middleware\FloatingButtonMiddleware;
 
 
@@ -42,7 +43,8 @@ class ServiceDeskProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                BaseCommand::class,
+                ListTicketsByEmailCommand::class,
+                ServiceDeskInfoCommand::class,
             ]);
         }
     }

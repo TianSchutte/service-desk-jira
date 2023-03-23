@@ -70,6 +70,11 @@ class TicketViewController
      */
     public function storeComment(Request $request)
     {
+        $request->validate([
+            'issue_key' => 'required',
+            'comment_body' => 'required'
+        ]);
+
         $issueKey = $request->input('issue_key');
         $commentBody = $request->input('comment_body');
 
