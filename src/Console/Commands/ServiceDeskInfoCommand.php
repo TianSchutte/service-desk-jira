@@ -6,11 +6,6 @@ use Exception;
 use Illuminate\Console\Command;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
-/**
- * @package MailWizzSync
- * @licence Giant Outsourcing
- * @author: Tian Schutte
- */
 class ServiceDeskInfoCommand extends Command
 {
     /**
@@ -26,15 +21,15 @@ class ServiceDeskInfoCommand extends Command
     /**
      * @var ServiceDeskService
      */
-    private $jiraServiceDeskService;
+    private $serviceDesk;
 
     /**
-     * @param ServiceDeskService $jiraServiceDeskService
+     * @param ServiceDeskService $serviceDeskService
      */
-    public function __construct(ServiceDeskService $jiraServiceDeskService)
+    public function __construct(ServiceDeskService $serviceDeskService)
     {
         parent::__construct();
-        $this->jiraServiceDeskService = $jiraServiceDeskService;
+        $this->serviceDesk = $serviceDeskService;
     }
 
     /**
@@ -44,8 +39,8 @@ class ServiceDeskInfoCommand extends Command
     {
         try {
 
-            $info = $this->jiraServiceDeskService->getInfo();
-            $serviceDeskInfo = $this->jiraServiceDeskService->getServiceDesk();
+            $info = $this->serviceDesk->getInfo();
+            $serviceDeskInfo = $this->serviceDesk->getServiceDesk();
 
             $this->info('Jira Service Desk Info:');
             $this->line('- Version: ' . $info->version);

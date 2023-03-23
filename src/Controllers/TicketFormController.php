@@ -16,30 +16,31 @@ class TicketFormController
     /**
      * @var mixed
      */
-    private $project_id;
+    private $serviceDeskId;
 
     /**
      * @var Application|mixed
      */
-    private $jiraServiceDeskService;
+    private $serviceDesk;
 
     /**
      * TicketFormController constructor.
-     * @param ServiceDeskService $jiraServiceDeskService
+     * @param ServiceDeskService $serviceDeskService
      */
-    public function __construct(ServiceDeskService $jiraServiceDeskService)
+    public function __construct(ServiceDeskService $serviceDeskService)
     {
-        $this->project_id = config('service-desk-jira.project_id');
-        $this->jiraServiceDeskService = $jiraServiceDeskService;
+        $this->serviceDeskId = config('service-desk-jira.project_id');
+        $this->serviceDesk = $serviceDeskService;
     }
 
     /**
+     * @description Shows the groups types to get request types from
      * @return Application|Factory|View|RedirectResponse
      */
     public function index()
     {
         try {
-            $typeGroups = $this->jiraServiceDeskService->getTypeGroup()->values;
+            $typeGroups = $this->serviceDesk->getTypeGroup()->values;
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -50,13 +51,14 @@ class TicketFormController
     }
 
     /**
+     * @description Shows the request types to generate form from
      * @param $groupId
      * @return Application|Factory|View|RedirectResponse
      */
     public function group($groupId)
     {
         try {
-            $requestTypes = $this->jiraServiceDeskService->getTypes()->values;
+            $requestTypes = $this->serviceDesk->getTypes()->values;
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -74,15 +76,16 @@ class TicketFormController
     }
 
     /**
+     * @description Shows the dynamic form for creating a ticket
      * @param $id //requestTypeId
      * @return Application|Factory|View|RedirectResponse
      */
     public function show($id)
     {
         try {
-            $fields = $this->jiraServiceDeskService->getFields($id)->requestTypeFields;
-            $fieldValues = $this->jiraServiceDeskService->getServiceAndUserFields($fields);
-            $typeValues = $this->jiraServiceDeskService->getTypeById($id);
+            $fields = $this->serviceDesk->getFields($id)->requestTypeFields;
+            $fieldValues = $this->serviceDesk->getServiceAndUserFields($fields);
+            $typeValues = $this->serviceDesk->getTypeById($id);
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -97,6 +100,7 @@ class TicketFormController
     }
 
     /**
+     * @description Creates a ticket
      * @param Request $request
      * @return Application|Factory|View|RedirectResponse
      */
@@ -111,9 +115,9 @@ class TicketFormController
         $fieldValues = $request->except('_token', 'request_type_id', 'attachment');
 
         try {
-            $issueRequest = $this->jiraServiceDeskService->createIssue([
+            $issueRequest = $this->serviceDesk->createIssue([
                 'requestFieldValues' => $fieldValues,
-                'serviceDeskId' => $this->project_id,
+                'serviceDeskId' => $this->serviceDeskId,
                 'requestTypeId' => $requestTypeId,
                 'raiseOnBehalfOf' => Auth::user()->email
             ]);
@@ -121,7 +125,7 @@ class TicketFormController
             return back()->with('error', $e->getMessage())->withInput();
         }
 
-        $attachedFiles = $this->jiraServiceDeskService->AttachFiles($request, $issueRequest);
+        $attachedFiles = $this->serviceDesk->AttachFiles($request, $issueRequest);
 
         try {
             $this->assignAssignee($issueRequest->issueKey);
@@ -136,17 +140,18 @@ class TicketFormController
     }
 
     /**
+     * @description Assigns the default assignee to the ticket
      * @param $issueKey
      * @return void
      * @throws ServiceDeskException
      */
     private function assignAssignee($issueKey)
     {
-        $customerTickets = $this->jiraServiceDeskService->getCustomerByEmail(
+        $customerTickets = $this->serviceDesk->getCustomerByEmail(
             config('service-desk-jira.default_assignee')
         );
 
-        $assignee = $this->jiraServiceDeskService->addAssignee($issueKey, [
+        $assignee = $this->serviceDesk->addAssignee($issueKey, [
             'accountId' => $customerTickets[0]->accountId,
         ]);
     }

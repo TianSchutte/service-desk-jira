@@ -11,15 +11,15 @@ class TicketMenuController
 {
 
     /**
+     * @description Shows the menu, which lets users select what they want to do
      * @return Application|Factory|View
      */
     public function index()
     {
         $actions = [];
-        $user_email = null;
+        $user_email = optional(Auth::user())->email;
 
-        if (Auth::user() !== null) {
-            $user_email = Auth::user()->email;
+        if ($user_email) {
             $actions = [
                 0 => [
                     'name' => 'Create a Ticket',

@@ -16,15 +16,15 @@ class TicketViewController
     /**
      * @var ServiceDeskService
      */
-    private $jiraServiceDeskService;
+    private $serviceDesk;
 
     /**
      * TicketViewController constructor.
-     * @param ServiceDeskService $jiraServiceDeskService
+     * @param ServiceDeskService $serviceDeskService
      */
-    public function __construct(ServiceDeskService $jiraServiceDeskService)
+    public function __construct(ServiceDeskService $serviceDeskService)
     {
-        $this->jiraServiceDeskService = $jiraServiceDeskService;
+        $this->serviceDesk = $serviceDeskService;
     }
 
     /**
@@ -33,7 +33,7 @@ class TicketViewController
     public function index()
     {
         try {
-            $tickets = $this->jiraServiceDeskService->getCustomerTickets(Auth::user()->email)->issues;
+            $tickets = $this->serviceDesk->getCustomerTickets(Auth::user()->email)->issues;
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -52,8 +52,8 @@ class TicketViewController
         $requestTicketId = $id;
 
         try {
-            $issue = $this->jiraServiceDeskService->getIssue($requestTicketId);
-            $comments = $this->jiraServiceDeskService->getComments($requestTicketId)->values;
+            $issue = $this->serviceDesk->getIssue($requestTicketId);
+            $comments = $this->serviceDesk->getComments($requestTicketId)->values;
         } catch (ServiceDeskException $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -79,12 +79,12 @@ class TicketViewController
         $commentBody = $request->input('comment_body');
 
         $data = [
-            'body' => Auth::user()->email . ' : ' . $commentBody,
+            'body' => optional(Auth::user())->email . ' : ' . $commentBody,
             'public' => true,
 //            'raiseOnBehalfOf' => Auth::user()->email //todo this functionality is not included in jira for this endpoint
         ];
         try {
-            $this->jiraServiceDeskService->addComment($issueKey, $data);
+            $this->serviceDesk->addComment($issueKey, $data);
         } catch (ServiceDeskException $e) {
             return redirect()->route('tickets.view.index')->with('error', $e->getMessage());
         }

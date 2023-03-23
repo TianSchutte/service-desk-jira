@@ -6,11 +6,6 @@ use Exception;
 use Illuminate\Console\Command;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
-/**
- * @package MailWizzSync
- * @licence Giant Outsourcing
- * @author: Tian Schutte
- */
 class ListTicketsByEmailCommand extends Command
 {
     /**
@@ -26,15 +21,15 @@ class ListTicketsByEmailCommand extends Command
     /**
      * @var ServiceDeskService
      */
-    private $jiraServiceDeskService;
+    private $serviceDesk;
 
     /**
-     * @param ServiceDeskService $jiraServiceDeskService
+     * @param ServiceDeskService $serviceDeskService
      */
-    public function __construct(ServiceDeskService $jiraServiceDeskService)
+    public function __construct(ServiceDeskService $serviceDeskService)
     {
         parent::__construct();
-        $this->jiraServiceDeskService = $jiraServiceDeskService;
+        $this->serviceDesk = $serviceDeskService;
     }
 
     /**
@@ -45,7 +40,7 @@ class ListTicketsByEmailCommand extends Command
         try {
             $customerEmail = $this->argument('customerEmail');
 
-            $issues = $this->jiraServiceDeskService->getCustomerTickets($customerEmail)->issues;
+            $issues = $this->serviceDesk->getCustomerTickets($customerEmail)->issues;
 
             if (count($issues) > 0) {
                 $this->info($customerEmail . '\'s Jira Service Desk Tickets:');
