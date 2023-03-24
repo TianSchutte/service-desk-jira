@@ -2,17 +2,14 @@
     "name": "tianschutte/service-desk-jira",
     "autoload": {
         "psr-4": {
-            "Root\\ServiceDeskJira\\": "src/"
+            "TianSchutte\\ServiceDeskJira\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
                 "TianSchutte\\ServiceDeskJira\\Providers\\ServiceDeskProvider"
-            ],
-            "aliases": {
-                "JiraServiceDesk": "TianSchutte\\ServiceDeskJira\\Facades\\JiraServiceDeskFacade"
-            }
+            ]
         }
     },
     "authors": [
@@ -22,7 +19,7 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.0",
-        "mashape/unirest-php": "^3.0"
+        "guzzlehttp/guzzle": "^6.0 || ^7.0 || ^8.0",
+        "ext-json": "*"
     }
 }

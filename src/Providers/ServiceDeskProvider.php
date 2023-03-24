@@ -3,15 +3,21 @@
 namespace TianSchutte\ServiceDeskJira\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use TianSchutte\ServiceDeskJira\Services\JiraServiceDeskService;
+use TianSchutte\ServiceDeskJira\Console\Commands\ListTicketsByEmailCommand;
+use TianSchutte\ServiceDeskJira\Console\Commands\ServiceDeskInfoCommand;
+use TianSchutte\ServiceDeskJira\Middleware\FloatingButtonMiddleware;
 
 
 class ServiceDeskProvider extends ServiceProvider
 {
+    /**
+     * @return void
+     */
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/servicedeskjira.php', 'service-desk-jira');
     }
+
     /**
      * Bootstrap services.
      *
@@ -19,26 +25,44 @@ class ServiceDeskProvider extends ServiceProvider
      */
     public function boot()
     {
+        //config
         $this->publishes([
             __DIR__ . '/../config/servicedeskjira.php' => config_path('servicedeskjira.php'),
         ], 'config');
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'service-desk-jira');
+        //css
+        $this->publishes([
+            __DIR__ . '/../resources/public' => public_path('vendor/courier'),
+        ], 'public');
 
+        $this->setupDefaults();
+        $this->setupFloatingButtonMiddleware();
+    }
+
+    /**
+     * @return void
+     */
+    private function setupDefaults()
+    {
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'service-desk-jira');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \TianSchutte\ServiceDeskJira\Console\Commands\BaseCommand::class,
+                ListTicketsByEmailCommand::class,
+                ServiceDeskInfoCommand::class,
             ]);
         }
-
-
-        $this->app->singleton('service-desk-jira', function ($app) {
-            $baseUrl = config('service-desk-jira.base_url');
-            $email = config('service-desk-jira.email');
-            $apiKey = config('service-desk-jira.api_key');
-            return new JiraServiceDeskService($baseUrl, $email, $apiKey);
-        });
     }
+
+    /**
+     * @return void
+     */
+    private function setupFloatingButtonMiddleware()
+    {
+        $router = $this->app['router'];
+        $router->pushMiddlewareToGroup('web', FloatingButtonMiddleware::class);
+    }
+
 }
