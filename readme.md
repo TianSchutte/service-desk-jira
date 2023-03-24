@@ -6,6 +6,7 @@ This package provides a button on websites where it is installed, which enables 
 ## Features
 ### Main
 - Floating Button: Button is added to the site, which when clicked, opens a modal with the ticket form, in an IFrame.
+  - This button is also only available to authenticated users, who are added as customers on jira's side.
 - Submit tickets: Users can fill out a ticket form provided by the package and submit it to Jira Service Management site via API.
   - Process is similar to submitting a ticket on Jira Service Management site, but with a few differences.
     - Process is: Choose Create, Choose Group, Choose Type, Fill out form, Submit. Easy.
@@ -35,10 +36,7 @@ JIRA_SERVICE_DESK_API_KEY='---'
 JIRA_SERVICE_DESK_PROJECT_ID=6
 JIRA_SERVICE_DESK_DEFAULT_ASSIGNEE='example@email.com'
 ```
-- Test the connection by running the following command in the project directory
-```bash
-php artisan service-desk:info
-```
+
 
 ### Package Setup
 - Add package to project 
@@ -60,21 +58,32 @@ php artisan vendor:publish --tag=config
 
 - Run the following command to publish the css file for FE look and feel
 
-```
+```php
 php artisan vendor:publish --tag=public --force
 ```
 
 - In the newly copied config file called servicedeskjira.php in `/config/servicedeskjira.php` make sure all details are set correctly
 ```php
     'base_url' => env('JIRA_SERVICE_DESK_BASE_URL', 'https://base.atlassian.net'),
-    'email' => env('JIRA_SERVICE_DESK_EMAIL', 'base@email.guru'),
-    'api_key' => env('JIRA_SERVICE_DESK_API_KEY','base'),
+    'email' => env('JIRA_SERVICE_DESK_EMAIL', 'base@email.com'),
+    'api_key' => env('JIRA_SERVICE_DESK_API_KEY', 'base'),
     'project_id' => env('JIRA_SERVICE_DESK_PROJECT_ID', '6'),
     'field_ids' => [
-            'service_field_id' => env('JIRA_SERVICE_DESK_SERVICE_FIELD_ID', 'customfield_10051'),
-            'user_field_id' => env('JIRA_SERVICE_DESK_USER_FIELD_ID', 'customfield_10003'),
-        ],
+        'service_field_id' => env('JIRA_SERVICE_DESK_SERVICE_FIELD_ID', 'customfield_10051'),
+        'user_field_id' => env('JIRA_SERVICE_DESK_USER_FIELD_ID', 'customfield_10003'),
+    ],
     'default_assignee' => env('JIRA_SERVICE_DESK_DEFAULT_ASSIGNEE', 'example@email.com'),
+    'api_prefix' => [
+        'rest_customer_portal' => 'rest/servicedesk/1/customer/portal',
+        'rest_service_desk_api' => 'rest/servicedeskapi',
+        'rest_service_desk_api_service_desk' => 'rest/servicedeskapi/servicedesk',
+        'rest_api' => 'rest/api',
+        'rest_service_registry'=>'rest/service-registry-api'
+    ]
+```
+- Test the connection by running the following command in the project directory
+```bash
+php artisan service-desk:info
 ```
 - After these steps, the button should appear on the site, and once your account is authenticated, it should be usable.
 
