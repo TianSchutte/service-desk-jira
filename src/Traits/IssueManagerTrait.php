@@ -14,9 +14,9 @@ trait IssueManagerTrait
      * @return mixed
      * @throws ServiceDeskException
      */
-    public function createIssue($data)
+    public function createIssue(array $data)
     {
-        $endpoint = "rest/servicedeskapi/request";
+        $endpoint = "{$this->restServiceDeskApi}/request";
 
         try {
             $response = $this->client->post($endpoint, [
@@ -26,7 +26,7 @@ trait IssueManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating issue. Please make sure all fields are filled');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -39,14 +39,14 @@ trait IssueManagerTrait
      */
     public function getIssue(string $issueKey)
     {
-        $endpoint = "rest/servicedeskapi/request/{$issueKey}";
+        $endpoint = "{$this->restServiceDeskApi}/request/{$issueKey}";
 
         try {
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving issue.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -60,7 +60,7 @@ trait IssueManagerTrait
      */
     public function updateIssue(string $issueKey, array $data)
     {
-        $endpoint = "rest/servicedeskapi/request/{$issueKey}";
+        $endpoint = "{$this->restServiceDeskApi}/request/{$issueKey}";
 
         try {
             $response = $this->client->put($endpoint, [
@@ -69,7 +69,7 @@ trait IssueManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while updating issue.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -83,7 +83,7 @@ trait IssueManagerTrait
      */
     public function addComment(string $issueKey, array $data)
     {
-        $endpoint = "rest/servicedeskapi/request/{$issueKey}/comment";
+        $endpoint = "{$this->restServiceDeskApi}/request/{$issueKey}/comment";
 
         try {
             $response = $this->client->post($endpoint, [
@@ -92,7 +92,7 @@ trait IssueManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding comment.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -105,14 +105,14 @@ trait IssueManagerTrait
      */
     public function getComments(string $issueKey)
     {
-        $endpoint = "rest/servicedeskapi/request/{$issueKey}/comment";
+       $endpoint = "{$this->restServiceDeskApi}/request/{$issueKey}/comment";
 
         try {
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while getting comments.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -126,7 +126,7 @@ trait IssueManagerTrait
      */
     public function addAttachment(string $issueKey, $data)
     {
-        $endpoint = "rest/servicedeskapi/request/{$issueKey}/attachment";
+        $endpoint = "{$this->restServiceDeskApi}/request/{$issueKey}/attachment";
 
         try {
             $response = $this->client->post($endpoint, [
@@ -135,7 +135,7 @@ trait IssueManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding Attachment.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -148,7 +148,7 @@ trait IssueManagerTrait
      */
     public function attachTemporaryFile($file)
     {
-        $endpoint = "/rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/attachTemporaryFile";
+        $endpoint = "{$this->restServiceDeskApiServiceDesk}/{$this->serviceDeskId}/attachTemporaryFile";
 
         try {
             $response = $this->client->post($endpoint, [
@@ -167,25 +167,30 @@ trait IssueManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while attaching temporary file.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @param string $issueKey
+     * @param array $data
+     * @return mixed
+     * @throws ServiceDeskException
+     */
     public function addAssignee(string $issueKey, array $data)
     {
-        $endpoint = "rest/api/2/issue/{$issueKey}/assignee";
+        $endpoint = "{$this->restApi}/2/issue/{$issueKey}/assignee";
 
         try {
-
             $response = $this->client->put($endpoint, [
                 'json' => $data
             ]);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding assignee.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());

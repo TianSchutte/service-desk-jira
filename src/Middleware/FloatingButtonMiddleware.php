@@ -4,7 +4,10 @@ namespace TianSchutte\ServiceDeskJira\Middleware;
 
 use Closure;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
+use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 /**
  * Class FloatingButtonMiddleware
@@ -16,6 +19,19 @@ use Illuminate\Support\Facades\View;
  */
 class FloatingButtonMiddleware
 {
+    /**
+     * @var ServiceDeskService
+     */
+    private $serviceDeskService;
+
+    /**
+     * FloatingButtonMiddleware constructor.
+     */
+    public function __construct(ServiceDeskService $serviceDeskService)
+    {
+
+        $this->serviceDeskService = $serviceDeskService;
+    }
 
     /**
      * @param $request
@@ -25,6 +41,10 @@ class FloatingButtonMiddleware
     public function handle($request, Closure $next)
     {
         $response = $next($request);
+
+        if (!$this->isServiceDeskCustomer()) {
+            return $response;
+        }
 
         if ($request->is('service-desk-jira*')) {
             return $response;
@@ -45,4 +65,36 @@ class FloatingButtonMiddleware
 
         return $response;
     }
+
+
+    /**
+     * @return bool
+     */
+    private function isServiceDeskCustomer(): bool
+    {
+        $userEmail = optional(Auth::user())->email;
+
+        if (empty($userEmail)) {
+            return false;
+        }
+
+        try {
+            $response = $this->serviceDeskService->getCustomerByEmail($userEmail);
+        }catch (\Exception $e) {
+            return false;
+        }
+
+        if (empty($response)) {
+            return false;
+        }
+
+        foreach ($response as $customer) {
+            if ($customer->emailAddress == $userEmail) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

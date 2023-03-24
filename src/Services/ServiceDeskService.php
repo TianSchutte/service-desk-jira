@@ -3,6 +3,8 @@
 namespace TianSchutte\ServiceDeskJira\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use TianSchutte\ServiceDeskJira\Contracts\CustomerManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\DeskManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\IssueManagerInterface;
@@ -39,6 +41,11 @@ class ServiceDeskService implements
      */
     protected $serviceDeskId;
 
+    protected $restApi;
+    protected $restCustomerPortal;
+    protected $restServiceDeskApi;
+    protected $restServiceDeskApiServiceDesk;
+
     /**
      * JiraServiceDeskService constructor.
      */
@@ -59,6 +66,10 @@ class ServiceDeskService implements
         ]);
 
         $this->serviceDeskId = config('service-desk-jira.project_id');
+        $this->restApi = config('service-desk-jira.api_prefix.rest_api');
+        $this->restCustomerPortal = config('service-desk-jira.api_prefix.rest_customer_portal');
+        $this->restServiceDeskApi = config('service-desk-jira.api_prefix.rest_service_desk_api');
+        $this->restServiceDeskApiServiceDesk = config('service-desk-jira.api_prefix.rest_service_desk_api_service_desk');
     }
 
     /**

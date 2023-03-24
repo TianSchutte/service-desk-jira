@@ -35,7 +35,7 @@ class TicketViewController
         $userEmail = optional(Auth::user())->email;
 
         if (!$userEmail) {
-            return redirect()->route('tickets.menu')->with('error', 'You must be logged in to create a ticket.')->withInput();
+            return redirect()->route('tickets.menu')->with('error', 'You must be logged in to view a ticket.')->withInput();
         }
 
         try {

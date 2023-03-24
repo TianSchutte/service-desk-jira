@@ -16,14 +16,14 @@ trait CustomerManagerTrait
      */
     public function getCustomerByEmail(string $customerEmail)
     {
-        $endpoint = "rest/servicedesk/1/customer/portal/{$this->serviceDeskId}/user-search?fieldConfigId=&fieldName=reporter&query=emailAddress='{$customerEmail}'";
+        $endpoint = "{$this->restCustomerPortal}/{$this->serviceDeskId}/user-search?fieldConfigId=&fieldName=reporter&query=emailAddress='{$customerEmail}'";
 
         try {
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving users.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -36,14 +36,14 @@ trait CustomerManagerTrait
      */
     public function getCustomers()
     {
-        $endpoint = "rest/servicedesk/1/customer/portal/{$this->serviceDeskId}/user-search?fieldConfigId=&fieldName=reporter&query=";
+        $endpoint = "{$this->restCustomerPortal}/{$this->serviceDeskId}/user-search?fieldConfigId=&fieldName=reporter&query=";
 
         try {
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving users.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -63,14 +63,14 @@ trait CustomerManagerTrait
 
         $projectKey = $this->getServiceDesk()->projectKey;
 
-        $endpoint = "/rest/api/2/search?jql=project = $projectKey AND (reporter = '$userEmail')&fields=summary";
+        $endpoint = "{$this->restApi}/2/search?jql=project = $projectKey AND (reporter = '$userEmail')&fields=summary";
 
         try {
             $response = $this->client->get($endpoint);
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while retrieving user tickets.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -86,7 +86,7 @@ trait CustomerManagerTrait
     {
         //Not Used.
         //JIRA administrator global permission is required to create a customer.
-        $endpoint = "/rest/servicedeskapi/customer/";
+        $endpoint = "{$this->restServiceDeskApi}/customer/";
 
         $data = [
             'email' => $userEmail,
@@ -100,7 +100,7 @@ trait CustomerManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while creating user.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());
@@ -113,8 +113,8 @@ trait CustomerManagerTrait
      */
     public function addCustomerToServiceDesk(string $userEmail)
     {
-        //requires add customer to function afaik
-        $endpoint = "/rest/servicedeskapi/servicedesk/{$this->serviceDeskId}/customer";
+         //requires add customer to function afaik
+        $endpoint = "{$this->restServiceDeskApiServiceDesk}/{$this->serviceDeskId}/customer";
 
         $data = [
             'usernames' => [$userEmail],
@@ -127,7 +127,7 @@ trait CustomerManagerTrait
         } catch (RequestException $e) {
             $this->handleGuzzleErrorResponse($e->getResponse(), 'Unknown error occurred while adding user to service desk.');
         } catch (Exception $e) {
-            throw new ServiceDeskException($e->getMessage());
+            throw new ServiceDeskException($e->getMessage(), $e->getCode(), $e);
         }
 
         return json_decode($response->getBody()->getContents());

@@ -153,12 +153,25 @@ class TicketFormController
      */
     private function assignAssignee($issueKey)
     {
-        $customerTickets = $this->serviceDesk->getCustomerByEmail(
-            config('service-desk-jira.default_assignee')
-        );
+        if (config('service-desk-jira.default_assignee') === null) {
+            throw new ServiceDeskException('No default assignee set in config file');
+        }
 
-        $assignee = $this->serviceDesk->addAssignee($issueKey, [
-            'accountId' => $customerTickets[0]->accountId,
-        ]);
+        $defaultAssignee = config('service-desk-jira.default_assignee');
+
+        $customers = $this->serviceDesk->getCustomerByEmail($defaultAssignee);
+
+        if (empty($customers)) {
+            throw new ServiceDeskException('No customer found with email: ' . $defaultAssignee);
+        }
+
+        foreach ($customers as $customer) {
+            if ($customer->emailAddress == $defaultAssignee) {
+                $this->serviceDesk->addAssignee($issueKey, [
+                    'accountId' => $customer->accountId,
+                ]);
+            }
+        }
+
     }
 }
