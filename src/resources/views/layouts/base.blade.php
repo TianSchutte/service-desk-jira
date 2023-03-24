@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('vendor/courier/css/jira-service-desk.css') }}">
-    {{--    TODO: this stylesheet link must be updated, i think, to be dynamic?--}}
+    <link rel="stylesheet" href="{{ asset('vendor/servicedeskjira/css/jira-service-desk.css') }}">
     <title>Document</title>
 
 </head>
