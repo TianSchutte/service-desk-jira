@@ -32,7 +32,7 @@ class ServiceDeskProvider extends ServiceProvider
 
         //css
         $this->publishes([
-            __DIR__ . '/../resources/public' => public_path('vendor/courier'),
+            __DIR__ . '/../resources/public' => public_path('vendor/servicedeskjira'),
         ], 'public');
 
         $this->setupDefaults();

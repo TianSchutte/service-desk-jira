@@ -28,3 +28,8 @@
     <textarea name="comment_body" id="comment_body" cols="30" rows="5" required></textarea>
     <button id="comment_submit" type="submit">Add comment</button>
 </form>
+<script>
+    $('#comment_form').on('submit', function () {
+        $('#comment_submit').prop('disabled', true);
+    });
+</script>

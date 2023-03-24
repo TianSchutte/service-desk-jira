@@ -52,18 +52,18 @@ TianSchutte\ServiceDeskJira\Providers\ServiceDeskProvider.php::class,
 
 - Run the following command to make alterations to config values as required
 
-```php
+```bash
 php artisan vendor:publish --tag=config
 ```
 
 - Run the following command to publish the css file for FE look and feel
 
-```php
+```bash
 php artisan vendor:publish --tag=public --force
 ```
 
 - In the newly copied config file called servicedeskjira.php in `/config/servicedeskjira.php` make sure all details are set correctly
-```php
+```dotenv
     'base_url' => env('JIRA_SERVICE_DESK_BASE_URL', 'https://base.atlassian.net'),
     'email' => env('JIRA_SERVICE_DESK_EMAIL', 'base@email.com'),
     'api_key' => env('JIRA_SERVICE_DESK_API_KEY', 'base'),
