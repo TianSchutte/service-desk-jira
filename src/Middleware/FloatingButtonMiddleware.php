@@ -4,9 +4,7 @@ namespace TianSchutte\ServiceDeskJira\Middleware;
 
 use Closure;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-use TianSchutte\ServiceDeskJira\Exceptions\ServiceDeskException;
 use TianSchutte\ServiceDeskJira\Services\ServiceDeskService;
 
 /**
@@ -29,7 +27,6 @@ class FloatingButtonMiddleware
      */
     public function __construct(ServiceDeskService $serviceDeskService)
     {
-
         $this->serviceDeskService = $serviceDeskService;
     }
 
@@ -42,14 +39,36 @@ class FloatingButtonMiddleware
     {
         $response = $next($request);
 
-        if (!$this->serviceDeskService->isServiceDeskCustomer()) {
-            return $response;
-        }
-
         if ($request->is('service-desk-jira*')) {
             return $response;
         }
 
+        if(!auth()->check()) {
+            return $response;
+        }
+
+        if (session('service_desk_customer_checked') === false) {
+            return $response;
+        }
+
+        if (session('service_desk_customer_checked') === true) {
+            $this->addFloatingButton($response);
+            return $response;
+        }
+
+        if (!$this->serviceDeskService->isServiceDeskCustomer()) {
+            session(['service_desk_customer_checked' => false]);
+
+            return $response;
+        }
+
+        $this->addFloatingButton($response);
+
+        return $response;
+    }
+
+    private function addFloatingButton($response)
+    {
         $isSuccessful = $response instanceof Response && $response->getStatusCode() == 200;
 
         if ($isSuccessful) {
@@ -60,10 +79,9 @@ class FloatingButtonMiddleware
             if ($post !== false) {
                 $content = substr($content, 0, $post) . $floatingButton->render() . substr($content, $post);
                 $response->setContent($content);
+
+                session(['service_desk_customer_checked' => true]);
             }
         }
-
-        return $response;
     }
-
 }
