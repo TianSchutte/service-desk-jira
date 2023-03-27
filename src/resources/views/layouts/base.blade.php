@@ -26,6 +26,8 @@
 
     <div class="base-container">
         @yield('content')
+        @include('service-desk-jira::partials.error-message')
+        @include('service-desk-jira::partials.success-message')
     </div>
 </main>
 

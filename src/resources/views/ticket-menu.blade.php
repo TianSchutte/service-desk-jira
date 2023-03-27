@@ -13,8 +13,8 @@
         </div>
     @endif
 
-    @include('service-desk-jira::partials.error-message')
-    @include('service-desk-jira::partials.success-message')
+{{--    @include('service-desk-jira::partials.error-message')--}}
+{{--    @include('service-desk-jira::partials.success-message')--}}
 
     <div class="footer-email-container">
         @if($user_email)

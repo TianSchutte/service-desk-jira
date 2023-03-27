@@ -5,6 +5,7 @@ namespace TianSchutte\ServiceDeskJira\Services;
 use GuzzleHttp\Client;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use TianSchutte\ServiceDeskJira\Contracts\CustomerManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\DeskManagerInterface;
 use TianSchutte\ServiceDeskJira\Contracts\IssueManagerInterface;
@@ -139,6 +140,36 @@ class ServiceDeskService implements
             'services' => $services,
             'users' => $users,
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isServiceDeskCustomer(): bool
+    {
+        $userEmail = optional(Auth::user())->email;
+
+        if (empty($userEmail)) {
+            return false;
+        }
+
+        try {
+            $response = $this->getCustomerByEmail($userEmail);
+        }catch (\Exception $e) {
+            return false;
+        }
+
+        if (empty($response)) {
+            return false;
+        }
+
+        foreach ($response as $customer) {
+            if ($customer->emailAddress == $userEmail) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

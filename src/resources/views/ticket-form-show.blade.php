@@ -39,7 +39,7 @@
                 @endforeach
             </table>
             <input type="hidden" name="request_type_id" value="{{ $requestTypeId }}">
-            @include('service-desk-jira::partials.error-message')
+{{--            @include('service-desk-jira::partials.error-message')--}}
             <button type="submit" id="submit">Submit</button>
         </form>
     @endif

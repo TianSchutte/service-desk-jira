@@ -42,7 +42,7 @@ class FloatingButtonMiddleware
     {
         $response = $next($request);
 
-        if (!$this->isServiceDeskCustomer()) {
+        if (!$this->serviceDeskService->isServiceDeskCustomer()) {
             return $response;
         }
 
@@ -64,37 +64,6 @@ class FloatingButtonMiddleware
         }
 
         return $response;
-    }
-
-
-    /**
-     * @return bool
-     */
-    private function isServiceDeskCustomer(): bool
-    {
-        $userEmail = optional(Auth::user())->email;
-
-        if (empty($userEmail)) {
-            return false;
-        }
-
-        try {
-            $response = $this->serviceDeskService->getCustomerByEmail($userEmail);
-        }catch (\Exception $e) {
-            return false;
-        }
-
-        if (empty($response)) {
-            return false;
-        }
-
-        foreach ($response as $customer) {
-            if ($customer->emailAddress == $userEmail) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }
