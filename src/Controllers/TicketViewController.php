@@ -32,11 +32,11 @@ class TicketViewController
      */
     public function index()
     {
-        $userEmail = optional(Auth::user())->email;
-
-        if (!$userEmail) {
+        if (!$this->serviceDesk->isServiceDeskCustomer()) {
             return redirect()->route('tickets.menu')->with('error', 'You must be logged in to view a ticket.')->withInput();
         }
+
+        $userEmail = optional(Auth::user())->email;
 
         try {
             $tickets = $this->serviceDesk->getCustomerTickets($userEmail)->issues;
